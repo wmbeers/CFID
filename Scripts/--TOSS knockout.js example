@@ -1,0 +1,7 @@
+<div id="filterOptions" data-bind="foreach: filterCategories">
+	<h3 data-bind="text: Label"></h3>
+	<div data-bind="foreach: Values">
+		<input type='checkbox' data-bind="uniqueId: true, value: Value, attr: {name: $parent.FieldName}" />
+		<label data-bind="uniqueFor: 'after', text: Label"></label><br />
+	</div>
+</div>

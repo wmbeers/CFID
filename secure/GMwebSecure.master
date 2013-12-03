@@ -1,0 +1,70 @@
+﻿<%@ Master Language="VB" CodeFile="GMwebSecure.master.vb" Inherits="GMweb" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png"/>
+
+    <asp:ContentPlaceHolder ID="PlaceHolder" runat="server">
+
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">    
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" >
+    </asp:ScriptManager>
+    <div id="wrapper">
+        <strong style="float: left; position: absolute; z-index: 200px; left: 10px; top: 8px;
+            color: #EDEEF1;">Rev.3.23.3</strong>  
+        <div id="header"> 
+              
+
+            <div class="row r_text bold white">
+                 <span>   <a href="info.aspx"  class="white">FAQ's</a> &nbsp;&nbsp;&nbsp; <a href="info.aspx" class="white">Support</a> &nbsp;&nbsp;&nbsp; <a href="contact.aspx" class="white">Feedback</a>
+                 </span>  &nbsp;&nbsp;&nbsp; 
+               
+                   <span class="yellow">Logged In :</span><%=Session("screenname")%>
+                | <a href="../logout.aspx" class="yellow">Logout</a>
+                
+                
+                    </div>
+            <div class="row"> 
+              
+                <div id="logo_other_pages">
+                    <a href="#">Logo</a></div>
+                <div id="nav">
+                    <ul>
+                        <%--<li><a href="General_Master.aspx"><span>Manage Lookup Data</span></a></li>--%>
+                        <li><a href="NewRecord.aspx"><span>Add Record</span></a></li>
+                        <li><a href="../ViewAll_Records.aspx"><span>View All Records</span></a></li>
+                        <li><a href="http://dev.gc-inc.com/cmap" target="_blank"><span>View Web Map</span></a></li>
+                        <%--<li><a href="http://dev.gc-inc.com/cfid/Documents/Corridor Screening Checklist CFID Worksheet.pdf" target="_blank" ><span>CFID Check List</span></a></li>--%>
+                        <li><a href="../ViewArchive_Records.aspx"><span>Archive List</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+       
+        <div class="clear">
+        </div>
+        
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+   <%-- <div id="footer">
+        <a href="http://www.tampabayfreight.com" target="_blank">Tampa Bay Freight.com </a>
+        || <a href="http://www.dot.state.fl.us" target="_blank">Florida Department of Transportation
+        </a>
+    </div>--%>
+    <div class="clear">
+    </div>
+    </form>
+</body>
+</html>

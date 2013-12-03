@@ -1,0 +1,212 @@
+/* CSS Document */
+
+html, body, h1, h2, h3, h4, h5, h6, p, ul, li, a
+{margin:0px; padding:0px;}
+
+ul, li {list-style:none;}
+
+.clear { clear:both;}
+
+.bold { font-weight:bold;}
+
+.left_float {float:left;}
+.right_float {float:right;}
+.r_text { text-align:right;}
+.c_text { text-align: center;}
+.light11{font-size:11px;}
+/*.row {width:135%;height:auto; float:left; padding:7px 0; } old*/
+.row {width:100%;height:auto; float:left; padding:7px 0; }
+.content{width:500px; height:auto; float:left;padding-right:10px;}
+.col {width: auto; height:auto;}
+.paddind_none { padding:0px;}
+
+
+.white { color:#FFFFFF;}
+.yellow { color:#fdeb57;}
+
+
+a {text-decoration:none; color:#21759b;}
+a:hover {text-decoration: underline;}
+
+h1 {font-size:24px;}
+p { margin-bottom:10px; line-height:18px; }
+
+
+
+body {background: #FFFFFF url(../images/bg.gif) repeat-x; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#595959;}
+
+#body_login_page { background:#FFFFFF url(../images/bg-login-page.gif) repeat-x; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:normal; color:#767676; }
+
+/* Wrapper */
+
+#wrapper {width:990px; height:auto; margin:auto;}
+
+/* Login Part */
+
+#login_position {width:990px; height:auto; float: left; margin-top:150px; padding:0 60px;}
+
+#logo { width:380px; height:162px; float:left; margin-top:70px; background: url(../images/logo-login-page.jpg) no-repeat;}
+
+
+#login_box { width:457px; height:auto; float: right; }
+
+#login_box_top { width:457px; height:33px; float: left; background:url(../images/login-box-corner.gif) top left no-repeat;}
+
+#login_box_bottam { width:457px; height:33px; float: left; background:url(../images/login-box-corner.gif) bottom left no-repeat;}
+
+#login_box_center { width:357px; height:auto; float: left; background:url(../images/login-box-bg.gif) repeat-y; padding:10px 50px;}
+
+.login_box_row { width:357px; height:auto; float: left; padding:10px 50px;}
+
+
+
+#login_box_form { width:357px; height:auto; float: left; }
+
+.login_box_form_row { width:357px; height:auto; float: left; padding:5px 0; }
+
+input.login_box_form_input { width:347px; height:25px; line-height:25px; padding:5px; float: left; border:1px #d7d4d4 solid; }
+
+label.login_box_form_label { width: auto; height: 35px; line-height:35px; }
+
+
+
+
+/* Start Executive Form Page  */
+
+/* Header */
+
+#header{width:990px; height:152px; float:left;}
+
+
+#logo_other_pages {width:217px; float:left; margin:17px;}
+
+#logo_other_pages a {height:88px; display:block; background: url(../images/logo.jpg) no-repeat; text-indent:-9999px;}
+
+#logo_other_pages a:hover {}
+
+
+/* Menu */
+
+
+#nav { width:710px; height:40px; float:right; margin-top:47px; font-size:11px; color:#FFFFFF; }
+
+#nav ul { display: inline;  }
+
+#nav li { display:inline;}
+
+#nav a { float:left; background:url(../images/nav_bg_1.png) no-repeat; padding:0 0 0 19px; text-decoration:none;}
+
+#nav a span { float:left; display:block; background: url(../images/nav_bg_2.png) no-repeat right top; padding:0px 25px 0px 6px; color:#627EB7; line-height:38px; color:#FFFFFF; font-weight:bold; }
+
+#nav a:hover span { color:#e7e7e7;}
+
+/* Body Part */
+
+#body_part {width:990px; height: auto; float:left; margin:20px 0;}
+
+#body_part_left_col {width:990px; height: auto; float:left;
+    margin-right: 270px;
+}
+
+.add_new_executive { width: auto; height:48px; line-height:48px; background:url(../images/edit-record.png) 15px 10px no-repeat; padding-left:60px;}
+
+#executive_form {width:711px; height:auto; float:left; font-size:14px;
+    margin-right: 277px;
+}
+#executive_form_top {width:711px; height:17px; float:left; background:url(../images/form_bg.png) no-repeat top left;}
+#executive_form_bottom {width:711px; height:17px; float:left; background:url(../images/form_bg.png) no-repeat bottom left;}
+#executive_form_center {width:689px; height: auto; float:left; padding:0 11px; background:url('../images/form_bg.png') repeat-y right top;
+    margin-right: 174px;
+}
+
+label.executive_form_label { width:150px; line-height:25px; float:left; text-align:right; padding-right:10px;}
+label.executive_form_label_1 { width:auto; height:40px; line-height:40px; padding-left:10px; }
+input.executive_form_input { width:370px; height:18px; padding:3px; border:1px #d7d4d4 solid;}
+input.highlight_input { width:370px; height:18px; padding:3px; border:1px orange solid;}
+input.executive_form_input_1 { width:390px; height:38px; padding:10px; border:1px #d7d4d4 solid;}
+select.executive_form_input { padding:3px; border:1px #d7d4d4 solid;}
+select.highlight_input{ padding:3px; border:1px orange solid;}
+textarea.executive_form_input { padding:3px; border:1px #d7d4d4 solid; overflow:auto}
+.bottom_boder { border-bottom:1px #c0bfbe dotted;}
+
+
+#body_part_right_col {width:250px; height: auto; float: right;}
+#executive_box_top {width:250px; height:36px; float:left; background:url(../images/executive_right_box_bg.png) no-repeat left top;}
+#executive_box_bottom {width:250px; height:36px; float:left; background:url(../images/executive_right_box_bg.png) no-repeat left bottom;}
+#executive_box_center {width:186px; height: auto; float:left; background:url(../images/executive_right_box_bg.png) repeat-y right top; padding:0 31px;}
+width:146px; height:24px; line-height:24px; float:left; background:url(../images/heading-bg.png) no-repeat; padding:0 20px; font-size:14px; color:#FFFFFF;}
+
+/* Footer */
+
+#footer {width: auto; height:50px; line-height:50px; margin:auto; background-color:#a3daf8; text-align:center;}
+
+/* Executive Form Page End */
+
+/* Start Welcome Page */
+
+.body_part_cols {width:250px; height: auto;}
+.cols_box_top {width:250px; height:36px; float:left; background:url(../images/executive_right_box_bg.png) no-repeat left top;}
+.cols_box_bottom {width:250px; height:36px; float:left; background:url(../images/executive_right_box_bg.png) no-repeat left bottom;}
+.cols_box_center {width:186px; height: auto; float:left; background:url(../images/executive_right_box_bg.png) repeat-y right top; padding:0 34px 0 28px;}
+
+.cols_box_center ul { font-weight:bold;}
+.cols_box_center li {width:186px; height:20px; line-height:20px; float:left; padding:5px 10px; }
+
+.cols_box_center li.side_nav_bg {width:186px; height:20px; line-height:20px;  background: url(../images/side-nav-heading-bg.png) no-repeat 0px 3px; color:#FFFFFF;}
+
+.home_bg { width: auto; height:46px; line-height:46px; background:url(../images/home.gif) no-repeat; padding-left:70px;}
+
+
+.body_part_col_center {width:470px; height: auto;}
+
+.welcome_box_top {width:449px; height:35px; line-height:35px; float:left; background: url(../images/welcome_page_box.png) no-repeat left top; padding-left:20px; font-size:18px; color:#FFFFFF;}
+.welcome_box_bottom {width:469px; height:16px; float:left; background: url(../images/welcome_page_box.png) no-repeat left bottom;}
+.welcome_box_center {width:469px; height: auto; float:left; background: url(../images/welcome_page_box.png) repeat-y right top; }
+.welcome_box_row_bg { background-color:#d4e7f0;}
+
+/* Welcome Page End */
+
+
+
+/* Start
+
+/* Welcome Page End */
+
+
+
+/* Start Button Style  */
+
+
+.button1 
+{
+	padding:6px 10px 7px 10px;border:#a3daf8 1px solid;
+	MARGIN: 0px; DISPLAY: inline; FONT: 16px "Lucida Grande", Sans-serif; 
+	BACKGROUND: url(../images/bg-btn.gif) #3c96c4 repeat-x 0px 0px; COLOR: #FFFFFF; OVERFLOW: visible;
+	CURSOR: pointer;
+	-moz-border-radius: 4px; -webkit-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; 
+}
+.button2 
+{
+	padding:6px 10px 7px 10px;border:#a3daf8 1px solid;
+	MARGIN: 0px; DISPLAY: inline; FONT: 16px "Lucida Grande", Sans-serif; 
+	BACKGROUND: url(../images/bg-btn.gif) #3c96c4 repeat-x 0px 0px; COLOR: #a3daf8; OVERFLOW: visible;
+	CURSOR: pointer;
+	-moz-border-radius: 4px; -webkit-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; 
+}
+.button3 
+{
+	padding:6px 10px 7px 10px;border:#a3daf8 1px solid;
+	MARGIN: 0px; DISPLAY: inline; FONT: 12px "Lucida Grande", Sans-serif; 
+	BACKGROUND: url(../images/bg-btn.gif) #3c96c4 repeat-x 0px 0px; COLOR: #a3daf8; OVERFLOW: visible;
+	CURSOR: pointer;
+	-moz-border-radius: 4px; -webkit-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; 
+}
+
+LINE-COLOR: invert; OUTLINE-WIDTH: medium
+}
+.button1:hover {
+	BORDER-BOTTOM-COLOR: #3c96c4; BORDER-TOP-COLOR: #a3daf8; BACKGROUND-POSITION: 0px -6px; COLOR: #000; BORDER-RIGHT-COLOR: #a3daf8; BORDER-LEFT-COLOR: #3c96c4; color:#d3efff;
+}
+
+/* Button Style End  */
+

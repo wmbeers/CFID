@@ -1,0 +1,214 @@
+﻿.GridHeader
+{
+    font-family: Calibri;
+    font-size: 13px;
+    color: #FFFFFF;
+    background-color: #2E4d7B;
+    padding-left: 20px;
+    text-align: Center !important;
+    height: 30px;
+}
+.GridHeader a
+{
+    font-family: Calibri;
+    font-size: 13px;
+    color: #FFFFFF;
+    /*#FFFFFF;*/
+    background-color: #2E4d7B;
+    padding-left: 20px;
+    text-align: Center !important;
+    text-decoration: none;
+    height: 30px;
+}
+.GridHeader a:hover
+{
+    text-decoration: underline;
+}
+.GridRowStyle
+{
+    font-family: verdana;
+    font-size: 12px;
+    color: #000000;
+    background-color: #E7E7FF;
+    text-align: left;
+    height: 22px;
+}
+.GridRowStyle:hover
+{
+    color: #000000;
+    background-color: #B3E7FF;
+    padding-left: 20px;
+    font-family: Verdana;
+    font-size: 12px;
+    text-align: left;
+    height: 22px;
+    cursor: pointer;
+}
+.GridAlternativeRow
+{
+    font-family: verdana;
+    font-size: 12px;
+    color: #000000;
+    background-color: #F7F7F7;
+    text-align: left;
+    padding-left: 20px;
+    height: 22px;
+    cursor: hand;
+}
+.GridAlternativeRow:hover
+{
+    color: #666666;
+    padding-left: 20px;
+    background-color: #B3E7FF;
+    font-family: Verdana;
+    font-size: 12px;
+    text-align: left;
+    height: 22px;
+    cursor: pointer;
+}
+.GridSelectedRow
+{
+    font-family: verdana;
+    font-size: 12px;
+    color: #000000;
+    background-color: #9B9BFF;
+    text-align: left;
+    height: 22px;
+}
+.GridFooterStyle
+{
+    font-family: Verdana;
+    font-size: 11px;
+    color: #333333;
+    background-color: #E7E7FF;
+}
+.FormAlternativeRow
+{
+    font-family: verdana;
+    font-size: 12px;
+    color: #000000;
+    background-color: #97DBFF;
+    text-align: left;
+    padding-left: 10px;
+    height: 22px;
+}
+
+.FormRowStyle
+{
+    font-family: verdana;
+    font-size: 12px;
+    color: #000000;
+    background-color: #D9F2FF;
+    text-align: left;
+    padding-left: 10px;
+    height: 22px;
+}
+.GridFooter
+{
+    font-family: verdana;
+    font-size: 12px;
+    color: #333333;
+    background-color: #E7E7FF;
+    padding-left: 10px;
+    height: 25px;
+    text-align: left;
+}
+.PaddingLeft
+{
+    padding-left: 20px;
+}
+.GridHeaderPadding
+{
+    font-family: Calibri;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #0088CC;
+    padding-left: 20px;
+    text-align: left !important;
+    height: 30px;
+}
+/***********Ul li Jquery according**********/
+#accordion
+{
+    list-style: none;
+    padding: 0 0 0 0;
+    width: 170px;
+}
+#accordion li
+{
+    color: white;
+    background-color: #2E4d7B;
+    font-family: Arial, Sans-Serif;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    width: 255px;
+}
+#accordion ul
+{
+    list-style: none;
+    padding: 0 0 0 0;
+    display: none;
+    width:255px;
+}
+#accordion ul li
+{
+    font-weight: normal;
+    cursor: auto;
+    padding: 0 0 0 7px;
+    background-color: transparent;
+    color: #333333;
+}
+#accordion a
+{
+    text-decoration: none;
+}
+#accordion a:hover
+{
+    text-decoration: underline;
+} 
+
+/*-----accordion2----*/
+#accordion2
+{
+    list-style: none;
+    padding: 0 0 0 0;
+    width: 170px;
+}
+#accordion2 li
+{
+    color: white;
+    background-color: #2E4d7B;
+    font-family: Arial, Sans-Serif;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    width: 255px;
+}
+#accordion2 ul
+{
+    list-style: none;
+    padding: 0 0 0 0;
+    display: none;
+    width:255px;
+}
+#accordion2 ul li
+{
+    font-weight: normal;
+    cursor: auto;
+    padding: 0 0 0 7px;
+    background-color: transparent;
+    color: #333333;
+}
+#accordion2 a
+{
+    text-decoration: none;
+}
+#accordion2 a:hover
+{
+    text-decoration: underline;
+} 
