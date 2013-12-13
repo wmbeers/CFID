@@ -16,8 +16,8 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" >
     </asp:ScriptManager>
     <div id="wrapper">
-        <strong style="float: left; position: absolute; z-index: 200px; left: 10px; top: 8px;
-            color: #EDEEF1;">Rev.3.23.3</strong>  
+       <%-- <strong style="float: left; position: absolute; z-index: 200px; left: 10px; top: 8px;
+            /*color: #EDEEF1;*/">Rev.3.23.3</strong> --%> 
         <div id="header"> 
               
 
@@ -35,14 +35,14 @@
                 <div id="logo_other_pages">
                     <a href="#">Logo</a></div>
                 <div id="nav">
-                    <ul>
-                        <%--<li><a href="General_Master.aspx"><span>Manage Lookup Data</span></a></li>--%>
+                   <%-- <ul>
+                        <li><a href="General_Master.aspx"><span>Manage Lookup Data</span></a></li>
                         <li><a href="secure/NewRecord.aspx"><span>Add Record</span></a></li>
                         <li><a href="ViewAll_Records.aspx"><span>View All Records</span></a></li>
                         <li><a href="http://dev.gc-inc.com/cmap" target="_blank"><span>View Web Map</span></a></li>
-                        <%--<li><a href="http://dev.gc-inc.com/cfid/Documents/Corridor Screening Checklist CFID Worksheet.pdf" target="_blank" ><span>CFID Check List</span></a></li>--%>
+                        <li><a href="http://dev.gc-inc.com/cfid/Documents/Corridor Screening Checklist CFID Worksheet.pdf" target="_blank" ><span>CFID Check List</span></a></li>
                         <li><a href="ViewArchive_Records.aspx"><span>Archive List</span></a></li>
-                    </ul>
+                    </ul>--%>
                 </div>
             </div>
         </div>

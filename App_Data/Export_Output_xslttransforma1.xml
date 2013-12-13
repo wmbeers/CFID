@@ -1,0 +1,262 @@
+﻿<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <title>Comprehensive Freight Improvement Database (CFID) or Regional Tampa Bay Freight Improvement Dataset</title>
+        <geoform>vector digital data</geoform>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>Comprehensive Freight Improvement Database (CFID) was developed by the Florida Department of Transportation (FDOT) to create and maintain a running spatial inventory of roadway and other transportation infrastructure issues and needs that impact regional goods movement and local accessibility to freight activity locations. District 7 data collection started in 2010 and was updated in 2013. District 1</abstract>
+      <purpose>This dataset contains the Comprehensive Freight Improvement Database (CFID) dataset. CFID is a running spatial inventory of roadway and other transportation infrastructure issues and needs on the state road network. The purpose of the database is to provide engineers and planners at the Department, MPOs, local governments and transportation consultants with single source of information regarding all aspects of the Tampa Bay Regional Goods Movement System for use in project scoping, corridor analysis, sub-area analysis, project design requirements, input to the regional transportation model, and long range planning.</purpose>
+    </descript>
+    <spdom>
+      <bounding>
+        <westbc>-82.869326</westbc>
+        <eastbc>-81.526767</eastbc>
+        <northbc>28.972181</northbc>
+        <southbc>26.949552</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>Transportation system</themekey>
+        <themekey>roadway network</themekey>
+        <themekey>freight</themekey>
+        <themekey>trucking</themekey>
+        <themekey>ports</themekey>
+        <themekey>seaport</themekey>
+        <themekey>network</themekey>
+        <themekey>freight activity center</themekey>
+        <themekey>freight markets</themekey>
+        <themekey>planning</themekey>
+        <themekey>Capital Improvements</themekey>
+        <themekey>planned improvements</themekey>
+        <themekey>work program</themekey>
+        <themekey>Florida Department of Transportation</themekey>
+        <themekey>Tampa Bay</themekey>
+        <themekey>freight needs</themekey>
+        <themekey>issues</themekey>
+        <themekey>construction</themekey>
+        <themekey>planning</themekey>
+        <themekey>corridor</themekey>
+        <themekey>traffic studies</themekey>
+        <themekey>District 7</themekey>
+        <themekey>Citrus</themekey>
+        <themekey>Hernando</themekey>
+        <themekey>Hillsborough</themekey>
+        <themekey>Pasco</themekey>
+        <themekey>Pinellas</themekey>
+        <themekey>District 1 Manatee</themekey>
+        <themekey>Polk</themekey>
+        <themekey>Sarasota</themekey>
+      </theme>
+    </keywords>
+    <accconst>None</accconst>
+    <useconst>NONE</useconst>
+    <datacred>Florida Department of Transportation - District 7, 2013
+Florida Department of Transportation - District 1, 2011</datacred>
+    <native>Microsoft Windows 7 Version 6.1 (Build 7601) Service Pack 1; ESRI ArcGIS 10.0.5.4400</native>
+  </idinfo>
+  <spdoinfo>
+    <direct>Vector</direct>
+    <ptvctinf>
+      <sdtsterm>
+        <sdtstype>Entity point</sdtstype>
+        <ptvctcnt>686</ptvctcnt>
+      </sdtsterm>
+    </ptvctinf>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <mapproj>
+          <mapprojn>Transverse Mercator</mapprojn>
+          <transmer>
+            <sfctrmer>0.9996</sfctrmer>
+            <longcm>-81.0</longcm>
+            <latprjo>0.0</latprjo>
+            <feast>500000.0</feast>
+            <fnorth>0.0</fnorth>
+          </transmer>
+        </mapproj>
+        <planci>
+          <plance>coordinate pair</plance>
+          <coordrep>
+            <absres>0.000000002220024164500956</absres>
+            <ordres>0.000000002220024164500956</ordres>
+          </coordrep>
+          <plandu />
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>D North American 1983</horizdn>
+        <ellips>GRS 1980</ellips>
+        <semiaxis>6378137.0</semiaxis>
+        <denflat>298.257222101</denflat>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>Export_Output</enttypl>
+      </enttyp>
+      <attr>
+        <attrlabl>FID</attrlabl>
+        <attrdef>Internal feature number.</attrdef>
+        <attrdefs>ESRI</attrdefs>
+        <attrdomv>
+          <udom>Sequential unique whole numbers that are automatically generated.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>Shape</attrlabl>
+        <attrdef>Feature geometry.</attrdef>
+        <attrdefs>ESRI</attrdefs>
+        <attrdomv>
+          <udom>Coordinates defining the features.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>OID_</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>FDOT_Distr</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>COUNTY</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>CORRIDOR</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>ISSUE_EXTE</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>SITE_LOCAT</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>SEGMENT_TO</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>SEGMENT_FR</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>ISSUESITEL</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>FREIGHT_NE</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>ISSUE_DESC</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>CORRIDOR_S</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>PRIORITY</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>EASE</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>ROWCONSTRA</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>UTILITYCON</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>LIGHTPOLEC</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>SIGNAGECON</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>STRUCTUREC</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>OTHERCONST</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>FIELD_VERI</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>DATE_RECOM</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>ROADWAYID</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>BEGMP</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>ENDMP</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>SECONDRDWY</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>LOCMP</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>LATY</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>LONX</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>LAT</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>LON</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>TRANSPORT_</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>FREIGHT_SY</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>FIELD_OBS</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>RECOMMENDA</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>COMMENTS</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>IMPRVMNT_S</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>IMPRVMNT_1</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>SOURCE</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>DATE_MODIF</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>MISC_INFO</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>Xdd</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>Ydd</attrlabl>
+      </attr>
+      <attr>
+        <attrlabl>Archived</attrlabl>
+      </attr>
+    </detailed>
+  </eainfo>
+  <metainfo>
+    <metd>20131213</metd>
+    <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+    <mettc>local time</mettc>
+  </metainfo>
+</metadata>
