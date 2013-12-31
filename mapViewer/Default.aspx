@@ -138,14 +138,14 @@
         function init() {
 
             //Initialize dynamic layers
-            cfidPointLayer = new esri.layers.FeatureLayer("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfidsde/MapServer/0",
+            cfidPointLayer = new esri.layers.FeatureLayer("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid/MapServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
                     }
                 );
 
-            cfidLineLayer = new esri.layers.FeatureLayer("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfidsde/MapServer/1",
+            cfidLineLayer = new esri.layers.FeatureLayer("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid/MapServer/1",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
@@ -212,7 +212,7 @@
             clickHandler = dojo.connect(map, "onClick", identify);
 
             //create identify tasks and setup parameters
-            identifyTask = new esri.tasks.IdentifyTask("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfidsde/MapServer");
+            identifyTask = new esri.tasks.IdentifyTask("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid/MapServer");
             identifyParams = new esri.tasks.IdentifyParameters();
             identifyParams.tolerance = 6;
             identifyParams.returnGeometry = false;
