@@ -253,7 +253,7 @@
                 "<tr><th>Freight System</th><td>${FREIGHT_SYSTEM}</td></tr>" +
                 "<tr><th colspan='2'>Field Observations</th></tr>" +
                 "<tr><td colspan='2'>${FIELD_OBS}</td></tr>" +
-                "<tr><th colspan='2'>Reccomendation</th></tr>" +
+                "<tr><th colspan='2'>Recommendation</th></tr>" +
                 "<tr><td colspan='2'>${RECOMMENDATION_DESC}</td></tr>" +
                 "<tr><th colspan='2'>Comments</th></tr>" +
                 "<tr><td colspan='2'>${COMMENTS}</td></tr>" +
@@ -716,7 +716,7 @@
     </script>
     <div id="container">
         <div id="filterOptionsDiv">
-            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logo.jpg" />
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logonew.png" />
             <div id="filterOptions">
             </div>
             <div id="controls">
