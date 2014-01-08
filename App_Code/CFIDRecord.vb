@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.VisualBasic
 
 Public Class CFIDRecord
-    Public OID As Integer
+    Public IssueID As Integer
     Public FDOT_District As String
     Public COUNTY As String
     Public CORRIDOR As String

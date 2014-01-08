@@ -6,6 +6,9 @@
 <head runat="server">
     <title>CFID - Comprehensive Freight Improvement Database</title>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+        window.location = "mapViewer/default.aspx";
+    </script>
 </head>
 <body id="body_login_page">
     <form id="form1" runat="server">

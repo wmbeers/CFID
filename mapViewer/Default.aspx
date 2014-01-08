@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>CFID Map Viewer</title>
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
+    <link rel="stylesheet" href="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
     <link rel="Stylesheet" href="css/jquery.dataTables.css" />
     <style type="text/css">
         html, body, #container, #mapDiv, #filterOptionsDiv
@@ -106,14 +106,14 @@
             text-align: left;
         }
     </style>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="scripts/jQuery.dataTables.js"></script>
     <script src="../Scripts/knockout-2.3.0.js" type="text/javascript"></script>
     <script src="../Scripts/knockout.validation.debug.js" type="text/javascript"></script>
     <script src="../Scripts/knockout-jQueryUI-Bindings.js" type="text/javascript"></script>
     <script type="text/javascript" src="../js/cfid.js"></script>
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+    <script type="text/javascript" src="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
     <script type="text/javascript">
         dojo.require("esri.map");
         dojo.require("esri.layers.FeatureLayer");
@@ -138,17 +138,17 @@
         function init() {
 
             //Initialize dynamic layers
-            cfidPointLayer = new esri.layers.FeatureLayer("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid/MapServer/0",
+            cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
+                        outFields: ["IssueID","SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
                     }
                 );
 
-            cfidLineLayer = new esri.layers.FeatureLayer("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid/MapServer/1",
+            cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/1",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
+                        outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
                     }
                 );
 
@@ -212,7 +212,7 @@
             clickHandler = dojo.connect(map, "onClick", identify);
 
             //create identify tasks and setup parameters
-            identifyTask = new esri.tasks.IdentifyTask("http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid/MapServer");
+            identifyTask = new esri.tasks.IdentifyTask("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer");
             identifyParams = new esri.tasks.IdentifyParameters();
             identifyParams.tolerance = 6;
             identifyParams.returnGeometry = false;
@@ -222,7 +222,7 @@
             identifyParams.height = map.height;
 
             //create the Info Window template, applied to features identified in the identify function
-            infoTemplate = new esri.InfoTemplate("Issue #: ${OID}",
+            infoTemplate = new esri.InfoTemplate("Issue #: ${IssueID}",
                 "<table><tr><th>District</th><td>${FDOT_District}</td></tr>" +
                 "<tr><th>County</th><td>${COUNTY}</td></tr>" +
                 "<tr><th>Corridor</th><td>${CORRIDOR}</td></tr>" +
@@ -302,7 +302,7 @@
                             var filterLabelValue = filterObject.Values[j];
                             i++; //increment the counter used to give unique IDs to checkboxes
                             valuesDiv.append(
-                                "<input type='checkbox' value='" + filterLabelValue.Value + "' name='" + filterObject.FieldName + "' id='cb" + i + "'/>" +
+                                "<input type='checkbox' value='" + filterLabelValue.Value + "' name='" + filterObject.FieldName + "' id='cb" + i + "' />" +
                                 "<label for='cb" + i + "'>" + filterLabelValue.Label + "</label><br />");
                         } //end loop through filter object values
                     } // end loop through filter objects array
@@ -328,7 +328,7 @@
             //tablular results dialog
             jQuery("#tableDiv").dialog({
                 "autoOpen": false,
-                "height": 250,
+                "height": 350,
                 "width": 800,
                 "open": function (event, ui) {
                     refreshObjectIds();
@@ -364,10 +364,9 @@
                 bInfo: "",
                 bPaginate: false,
                 fnRowCallback: function (nRow, aData, iDisplayIndex) {
-                    //add ZoomTo link
-                    //console.log("processing row for event #" + aData[0] + " at display index " + iDisplayIndex);
-                    var zoomLink = "<a href='javascript:void(0);' onclick='zoomTo(" + aData[0] + ", \"" + aData[9] + "\");'>Zoom</a>";
-                    //console.log(zoomLink);
+                    //add ZoomTo link, using objectID and feature type (data items 10 and 9)
+                    var zoomLink = "<a href='javascript:void(0);' onclick='zoomTo(" + aData[10] + ", \"" + aData[9] + "\");'>Zoom</a>";
+                    //add more info and edit links, using issueID (data item 0)
                     $('td:eq(6)', nRow).html(zoomLink);
                     var moreLink = "<a href='javascript:void(0);' onclick='openMoreInfo(" + aData[0] + ");'>More</a>";
                     $('td:eq(7)', nRow).html(moreLink);
@@ -389,321 +388,9 @@
             //openRecord(1450);
         } // end init
 
-        function initToolbar() {
-            toolBar = new esri.toolbars.Draw(map);
-            dojo.connect(toolBar, "onDrawEnd", addGraphic);
-
-
-        }
-
-        function toggleDrawArea() {
-            if (jQuery("#drawAreaButton").is(":checked")) {
-                toolBar.activate(esri.toolbars.Draw.FREEHAND_POLYGON);
-            } else {
-                toolBar.deactivate();
-            }
-
-        }
-
-        function addGraphic(geometry) {
-            toolBar.deactivate();
-            jQuery("#drawAreaButton").prop("checked", false);
-            //workaround to a jQuery bug that keeps it looking pressed and not updating the style
-            jQuery("label[for='drawAreaButton']").removeClass("ui-state-active").attr("aria-pressed", false);
-
-            //enable area-of-interest spatial filter option
-            jQuery("#spatialFilterOptionAOI").button("enable");
-            
-            //add graphic to map
-            map.graphics.clear();
-            var outLineSymbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-                new dojo.Color([120, 190, 12]), 3);
-            var fillSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, outLineSymbol,
-                new dojo.Color([120, 190, 12, 0.25]));
-            map.graphics.add(new esri.Graphic(geometry, fillSymbol));
-
-            //update table
-            refreshObjectIds();
-        };
-
-
-        function clearMap() {
-            //disable area-of-interest spatial filter option
-            jQuery("#spatialFilterOptionAOI").button("disable");
-            jQuery("#spatialFilterOptionMap").attr("checked", "checked");
-            //jQuery("label[for='drawAreaButton']").removeClass("ui-state-active").attr("aria-pressed", false);
-
-            map.graphics.clear();
-            refreshObjectIds();
-        }
 
         //call init function when page is fully loaded and dojo initialized
         dojo.ready(init);
-
-        //Opens the "more info" dialog to display the full record in a jQuery Dialog
-        function openMoreInfo(issueID) {
-            if (issueID == null) {
-                //surely there's a better way to get the issue ID...
-                //the object ID is in the title, e.g. Issue #: 1234 (i of n)
-                var title = jQuery(".esriPopup .title").html();
-                var rx = /Issue #: (\d+)/;
-                var m = rx.exec(title);
-                issueID = m[1];
-            }
-            var url = "fullRecord.aspx?OID=" + issueID;
-
-            jQuery("<div></div>").load(url, function () {
-                jQuery(this).dialog({ width: 700, title: "Issue #" + issueID });
-            });
-
-        }
-
-        //handles click event to initiate identify task
-        function identify(evt) {
-            //console.log("identify");
-            identifyParams.geometry = evt.mapPoint;
-            identifyParams.mapExtent = map.extent;
-            identifyParams.layerDefinitions = [];
-            identifyParams.layerDefinitions[0] = cfidPointLayer.getDefinitionExpression();
-            identifyParams.layerDefinitions[2] = cfidLineLayer.getDefinitionExpression();
-
-            var deferred = identifyTask.execute(identifyParams);
-
-            deferred.addCallback(function (response) {
-                //console.log(response);
-                // response is an array of identify result objects    
-                // Let's return an array of features.
-                return dojo.map(response, function (result) {
-                    //console.log(result);
-                    var feature = result.feature;
-                    feature.attributes.layerName = result.layerName;
-                    feature.setInfoTemplate(infoTemplate);
-                    return feature;
-                });
-            });
-
-
-            // InfoWindow expects an array of features from each deferred
-            // object that you pass. If the response from the task execution 
-            // above is not an array of features, then you need to add a callback
-            // like the one above to post-process the response and return an
-            // array of features.
-            map.infoWindow.setFeatures([deferred]);
-            map.infoWindow.show(evt.mapPoint);
-        }
-
-
-
-        //handles click events on checkboxes to dynamically update the definition expression of the map layers
-        function updateFilter() {
-            //disable checkboxes temporarily
-            jQuery("#filterOptions input[type=checkbox]").attr("disabled", "disabled");
-
-            var filters = {};
-            //get a list of all clicked checkboxes
-            jQuery("#filterOptions input[type=checkbox]:checked").each(function () {
-                var cb = jQuery(this);
-                var fieldName = cb.attr('name');
-                var fieldValue = cb.val();
-
-                if (fieldName.indexOf("CONSTRAINT") > 0) {
-                    //The six constraint options are handled differently, these are a series of six
-                    //individual columns with "Yes" / "No" values.
-                    filters[fieldName] = new Array();
-                    filters[fieldName].push('Yes');
-                } else {
-
-                    if (!filters.hasOwnProperty(fieldName))
-                        filters[fieldName] = new Array();
-
-                    filters[fieldName].push(fieldValue);
-                }
-            });
-
-            var definitionExpression = "ARCHIVED = 0";
-            jQuery.each(filters, function (key, value) {
-                definitionExpression = definitionExpression + " AND (";
-
-                definitionExpression = definitionExpression + key + " in ('" + value.join("','") + "')";
-                
-                if (jQuery.inArray("<null>",value) >= 0)
-                    definitionExpression = definitionExpression + " OR " + key + " is null";
-                definitionExpression = definitionExpression + ")"
-            });
-
-
-            //assign to definition expression property of layers, will dynamically refresh the map to only show
-            //features that match
-            //console.log("*************setting layer definitionExpression to " + definitionExpression);
-            cfidPointLayer.setDefinitionExpression(definitionExpression);
-            cfidLineLayer.setDefinitionExpression(definitionExpression);
-
-            //store query for later user
-            jQuery("#tableDiv").data("definitionExpression", definitionExpression);
-
-
-
-            //update the table
-            refreshObjectIds();
-
-        }
-
-        function refreshObjectIds() {
-            //console.log("refreshing object Ids");
-
-            //get the saved query
-            //why not just pass to this function, you say? because we won't always be doing this in response to changing filter options
-            var definitionExpression = jQuery("#tableDiv").data("definitionExpression");
-            if (definitionExpression == null || definitionExpression == "") definitionExpression = "ARCHIVED = 0"; 
-
-            //query our two layers for the objectIds.
-            var query = new esri.tasks.Query();
-
-            var spatialFilterOption = getSpatialFilterOption();
-            if (spatialFilterOption == "map") {
-                query.geometry = map.extent;
-            } else if (spatialFilterOption == "aoi") {
-                query.geometry = map.graphics.graphics[0].geometry;
-            }
-
-            //console.log("using spatial filter option " + spatialFilterOption);
-            //console.log("using definition expression " + definitionExpression);
-            query.where = definitionExpression;
-
-            //console.log(query.where);
-
-            //execute queries and store results
-            //the point layer is queried first, then in the callback function the line layer is queried
-            //this keeps things tidily ordered. Only after the line layer query is done do we refresh the table
-            cfidPointLayer.queryIds(query, function (objectIds) {
-                jQuery("#tableDiv").data("pointObjectIds", objectIds);
-                cfidLineLayer.queryIds(query, function (objectIds) {
-                    jQuery("#tableDiv").data("lineObjectIds", objectIds);
-                    refreshTable();
-                });
-            });
-        }
-
-        function refreshTable() {
-            //console.log("refreshing table");
-            //get the full list of object IDs as one unified set
-            var objectIds = jQuery("#tableDiv").data("pointObjectIds");
-            objectIds.concat(jQuery("#tableDiv").data("lineObjectIds"));
-
-
-            //bail if the dialog isn't open
-            if (jQuery("#tableDiv").dialog("isOpen") == false) {
-                //console.log("attribute table is not open, nothing to refresh");
-                return;
-            }
-
-            //reset the table's data
-            //jQuery("#attributeTableBody").html("");
-            jQuery("#attributeTable").dataTable().fnClearTable();
-
-
-            //initiate the query for all records
-            var query = new esri.tasks.Query();
-            query.returnGeometry = false;
-            query.objectIds = jQuery("#tableDiv").data("pointObjectIds");
-            cfidPointLayer.queryFeatures(query, function (featureSet) {
-                addRecords(featureSet, "p");
-                query.objectIds = jQuery("#tableDiv").data("lineObjectIds");
-                cfidLineLayer.queryFeatures(query, function (featureSet2) {
-                    addRecords(featureSet2, "l");
-                    esri.hide(dojo.byId("status"));
-                });
-            });
-        }
-
-        //        
-        //        function showExtent() {
-        //            alert('new esri.geometry.Extent({ "xmin": ' + map.extent.xmin + ', "ymin": ' + map.extent.ymin + ', "xmax": ' + map.extent.xmax + ', "ymax": ' + map.extent.ymax + ', "spatialReference": { "wkid": ' + map.extent.spatialReference.wkid + ' });');
-        //        }
-
-        //appends records from the selected featureset to the tableData array
-        function addRecords(featureSet, featureClassCode) {
-            var data = [];
-            for (var i = 0; i < featureSet.features.length; i++) {
-                var a = featureSet.features[i].attributes;
-                data.push([
-                     a.OBJECTID, a.SITE_LOCATION, a.COUNTY, a.PRIORITY, a.FREIGHT_NEED,
-                     a.FIELD_VERIFIED == 0 ? "Yes" : "No",
-                     "Zoom", "More", "Edit", featureClassCode]);
-            }
-            jQuery("#attributeTable").dataTable().fnAddData(data);
-
-            //            dojo.forEach(featureSet.features, function (entry, i) {
-            //                //var zoomLink = jQuery("<a href='javascript:void(0);'>").on("click", function () { zoomTo(entry) }).html("Zoom");
-            //                //var moreInfoLink = ""; //TODO
-
-            //                var a = entry.attributes;
-            //                var idx = 
-
-
-            //                //var tr = jQuery("#attributeTable tr td:first-child:contains('" + a.OID + "')").parent();
-            //                //var zoomCell = jQuery('td:nth-child(7)', tr);
-            //                //zoomCell.html("").append(zoomLink);
-
-            //                //                var tr = jQuery("<tr></tr>").appendTo("#attributeTableBody");
-            //                //                tr.append("<td>" + entry.attributes.OID + "</td>");
-            //                //                tr.append("<td>" + entry.attributes.SITE_LOCATION + "</td>");
-            //                //                tr.append("<td>" + entry.attributes.COUNTY + "</td>");
-            //                //                tr.append("<td>" + entry.attributes.PRIORITY + "</td>");
-            //                //                tr.append("<td>" + entry.attributes.FREIGHT_NEED + "</td>");
-            //                //                tr.append("<td>" + (entry.attributes["FIELD_VERIFIED"] == 0 ? "Yes" : "No") + "</td>");
-            //                //                var zoomLink = jQuery("<a href='javascript:void(0);'>").on("click", function () { zoomTo(entry) }).html("Zoom");
-            //                //                tr.append("<td></td>").append(zoomLink);
-            //                //                tr.append("<td><a href='javascript:void(0);' onclick='moreInfo(" + entry.attributes.OID + ");return false;'>More</a></td>");
-            //            });
-        }
-
-        function zoomTo(oid, featureClassCode) {
-            var featureClass = cfidPointLayer;
-            if (featureClassCode == "l") featureClass = cfidLineLayer;
-
-            //initiate the query for the record
-            var query = new esri.tasks.Query();
-            query.returnGeometry = true;
-            query.objectIds = [oid];
-            featureClass.queryFeatures(query, function (featureSet) {
-                zoomToFeature(featureSet.features[0]);
-            });
-        }
-
-        function zoomToFeature(feature) {
-            if (feature.geometry.type == "point")
-                map.centerAndZoom(feature.geometry, 17);
-            else
-                map.setExtent(feature.geometry.getExtent().expand(1.5));
-        }
-
-        function showTable() {
-            esri.show(dojo.byId("status"));
-            jQuery("#tableDiv").dialog("open");
-        }
-
-        function resetFilters() {
-            jQuery("#filterOptions input[type=checkbox]").removeAttr("checked");
-            updateFilter();
-        }
-
-        function showDebug() {
-            jQuery("#debugDialog").dialog("open");
-        }
-
-        function getSpatialFilterOption() {
-            var spatialFilterOption = jQuery("#spatialFilterOption input:checked").val();
-            if (spatialFilterOption == "aoi" & map.graphics.graphics.length == 0) {
-                //default to map if no drawn area; shouldn't happen...
-                spatialFilterOption = "map";
-            }
-            return spatialFilterOption;
-        }
-
-
-
-
 
 
     </script>
@@ -755,6 +442,7 @@
             </span>
             <label for="drawAreaButton">Draw</label><input type="checkbox" id="drawAreaButton" onclick="toggleDrawArea();" title="Click to draw an area of interest to filter results" />
             <button id="clearGraphics" onclick="clearMap();  return false;" title="Click to clear area of interest">Clear</button>
+            <button id="showReport" onclick="openReport();  return false;" title="Click to view more info in a report">Report</button>
             <div style="overflow: auto">
                 <table id="attributeTable">
                     <thead>
@@ -955,5 +643,11 @@
             <textarea rows="5" cols="80" id="COMMENTS" data-bind="value:COMMENTS" title="Comments about the Specific Location or Corridor."></textarea><br />
 
     </div>
+    <form target="_blank" id="ViewRecordsForm" action="ViewRecords.aspx" method="post">
+        <input type="hidden" id="issueIds" name="issueIds" />
+        <input type="hidden" id="spatialFilter" name="spatialFilter" />
+        <input type="hidden" id="attributeFilter" name="attributeFilter" />
+    </form>
+
 </body>
 </html>

@@ -92,7 +92,7 @@ Public Class FilterData
 
             Try
                 dbconn.Open()
-                Dim dbcmd As New SqlCommand("select distinct " + selectExpression + " FROM [cfid_master_view] where Archived = 0", dbconn)
+                Dim dbcmd As New SqlCommand("select  " + selectExpression + " FROM [cfid_point] where Archived = 0 union select " + selectExpression + " from [cfid_line] where archived = 0", dbconn)
                 Dim rdr As SqlDataReader = dbcmd.ExecuteReader
                 Do While rdr.Read
                     If rdr.IsDBNull(0) Or rdr.IsDBNull(1) Then
@@ -128,10 +128,10 @@ Public Class FilterData
 
     <WebMethod()> _
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)> _
-    Public Function GetRecordsByOIDs(ByVal OIDs As String()) As List(Of CFIDRecord) 'TODO: add paging and sorting, have signature return match jQuery.DataTable expectations
+    Public Function GetRecordsByIssueIds(ByVal IssueIds As String()) As List(Of CFIDRecord) 'TODO: add paging and sorting, have signature return match jQuery.DataTable expectations
         Dim dbconn As New SqlConnection(ConfigurationManager.AppSettings("connectionString").ToString())
         dbconn.Open()
-        Dim cmd As New SqlCommand("select * from cfid_master_view where objectid in (" + Join(OIDs, ",") + ")", dbconn)
+        Dim cmd As New SqlCommand("select * from cfid_master_view where IssueID in (" + Join(IssueIds, ",") + ")", dbconn)
         Dim rdr As SqlDataReader = cmd.ExecuteReader
         Dim recs As New List(Of CFIDRecord)
         Do While rdr.Read
@@ -142,6 +142,29 @@ Public Class FilterData
         Return recs
     End Function
 
+    <WebMethod()> _
+  <ScriptMethod(ResponseFormat:=ResponseFormat.Json)> _
+    Public Function GetRecordByIssueId(ByVal IssueId As Integer) As CFIDRecord
+        Dim dbconn As New SqlConnection(ConfigurationManager.AppSettings("connectionString").ToString())
+        dbconn.Open()
+        Dim cmd As New SqlCommand("select * from cfid_point where IssueID = " & IssueId, dbconn)
+        Dim rdr As SqlDataReader = cmd.ExecuteReader
+        Dim cfidRecord As CFIDRecord = Nothing
+        If rdr.Read Then
+            cfidRecord = GetRecordFromRow(rdr)
+        End If
+        rdr.Close()
+        If cfidRecord Is Nothing Then
+            cmd.CommandText = "select * from cfid_line where IssueID = " & IssueId
+            rdr = cmd.ExecuteReader
+            If rdr.Read Then
+                cfidRecord = GetRecordFromRow(rdr)
+            End If
+            rdr.Close()
+        End If
+        dbconn.Close()
+        Return cfidRecord
+    End Function
 
     Private Function GetRecordFromRow(ByVal rdr As SqlDataReader) As CFIDRecord
         Dim r As New CFIDRecord
@@ -188,16 +211,13 @@ Public Class FilterData
 
         Next
 
-        'special case for OBJECTID > OID
-        r.OID = rdr("OBJECTID")
-
-
 
         Return r
     End Function
 
 
-
+    'TODO: this whole method needs to be replaced with one that directly edits the feature classes, no more CFID_MASTER_TBL
+    <Obsolete("This method is going to be replaced with one that directly edits CFID_POINT and CFID_LINE features")> _
     <WebMethod()> _
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)> _
     Public Function SaveRecord(ByVal cfidRecord As CFIDRecord) As CFIDRecord
@@ -207,10 +227,10 @@ Public Class FilterData
         Dim cmd As New SqlCommand
         cmd.Connection = dbconn
 
-        If cfidRecord.OID = 0 Then
+        If cfidRecord.IssueID = 0 Then
             cmd.CommandText = "INSERT INTO CFID_MASTER_TBL (FDOT_District, COUNTY, CORRIDOR, ISSUE_EXTENT, SITE_LOCATION, SEGMENT_TO, SEGMENT_FROM, ISSUESITELOC, FREIGHT_NEED, ISSUE_DESCRIPTION, PRIORITY, EASE, ROWCONSTRAINT, UTILITYCONSTRAINT, LIGHTPOLECONSTRAINT, SIGNAGECONSTRAINT, STRUCTURECONSTRAINT, OTHERCONSTRAINT, FIELD_VERIFIED, DATE_RECOMMENDED, ROADWAYID, BEGMP, ENDMP, SECONDRDWYID, LOCMP, Ydd, Xdd, TRANSPORT_SYSTEM, FREIGHT_SYSTEM, FIELD_OBS, RECOMMENDATION_DESC, COMMENTS, IMPRVMNT_STAGE, SOURCE, MISC_INFO) values (@FDOT_District, @COUNTY, @CORRIDOR, @ISSUE_EXTENT, @SITE_LOCATION, @SEGMENT_TO, @SEGMENT_FROM, @ISSUESITELOC, @FREIGHT_NEED, @ISSUE_DESCRIPTION, @PRIORITY, @EASE, @ROWCONSTRAINT, @UTILITYCONSTRAINT, @LIGHTPOLECONSTRAINT, @SIGNAGECONSTRAINT, @STRUCTURECONSTRAINT, @OTHERCONSTRAINT, @FIELD_VERIFIED, @DATE_RECOMMENDED, @ROADWAYID, @BEGMP, @ENDMP, @SECONDRDWYID, @LOCMP, @Ydd, @Xdd, @TRANSPORT_SYSTEM, @FREIGHT_SYSTEM, @FIELD_OBS, @RECOMMENDATION_DESC, @COMMENTS, @IMPRVMNT_STAGE, @SOURCE, @MISC_INFO) "
         Else
-            cmd.CommandText = "UPDATE CFID_MASTER_TBL SET FDOT_District=@FDOT_District, COUNTY=@COUNTY, CORRIDOR=@CORRIDOR, ISSUE_EXTENT=@ISSUE_EXTENT, SITE_LOCATION=@SITE_LOCATION, SEGMENT_TO=@SEGMENT_TO, SEGMENT_FROM=@SEGMENT_FROM, ISSUESITELOC=@ISSUESITELOC, FREIGHT_NEED=@FREIGHT_NEED, ISSUE_DESCRIPTION=@ISSUE_DESCRIPTION, PRIORITY=@PRIORITY, EASE=@EASE, ROWCONSTRAINT=@ROWCONSTRAINT, UTILITYCONSTRAINT=@UTILITYCONSTRAINT, LIGHTPOLECONSTRAINT=@LIGHTPOLECONSTRAINT, SIGNAGECONSTRAINT=@SIGNAGECONSTRAINT, STRUCTURECONSTRAINT=@STRUCTURECONSTRAINT, OTHERCONSTRAINT=@OTHERCONSTRAINT, FIELD_VERIFIED=@FIELD_VERIFIED, DATE_RECOMMENDED=@DATE_RECOMMENDED, ROADWAYID=@ROADWAYID, BEGMP=@BEGMP, ENDMP=@ENDMP, SECONDRDWYID=@SECONDRDWYID, LOCMP=@LOCMP, Ydd=@Ydd, Xdd=@Xdd, TRANSPORT_SYSTEM=@TRANSPORT_SYSTEM, FREIGHT_SYSTEM=@FREIGHT_SYSTEM, FIELD_OBS=@FIELD_OBS, RECOMMENDATION_DESC=@RECOMMENDATION_DESC, COMMENTS=@COMMENTS, IMPRVMNT_STAGE=@IMPRVMNT_STAGE, SOURCE=@SOURCE, MISC_INFO=@MISC_INFO WHERE OBJECTID=@OID"
+            cmd.CommandText = "UPDATE CFID_MASTER_TBL SET FDOT_District=@FDOT_District, COUNTY=@COUNTY, CORRIDOR=@CORRIDOR, ISSUE_EXTENT=@ISSUE_EXTENT, SITE_LOCATION=@SITE_LOCATION, SEGMENT_TO=@SEGMENT_TO, SEGMENT_FROM=@SEGMENT_FROM, ISSUESITELOC=@ISSUESITELOC, FREIGHT_NEED=@FREIGHT_NEED, ISSUE_DESCRIPTION=@ISSUE_DESCRIPTION, PRIORITY=@PRIORITY, EASE=@EASE, ROWCONSTRAINT=@ROWCONSTRAINT, UTILITYCONSTRAINT=@UTILITYCONSTRAINT, LIGHTPOLECONSTRAINT=@LIGHTPOLECONSTRAINT, SIGNAGECONSTRAINT=@SIGNAGECONSTRAINT, STRUCTURECONSTRAINT=@STRUCTURECONSTRAINT, OTHERCONSTRAINT=@OTHERCONSTRAINT, FIELD_VERIFIED=@FIELD_VERIFIED, DATE_RECOMMENDED=@DATE_RECOMMENDED, ROADWAYID=@ROADWAYID, BEGMP=@BEGMP, ENDMP=@ENDMP, SECONDRDWYID=@SECONDRDWYID, LOCMP=@LOCMP, Ydd=@Ydd, Xdd=@Xdd, TRANSPORT_SYSTEM=@TRANSPORT_SYSTEM, FREIGHT_SYSTEM=@FREIGHT_SYSTEM, FIELD_OBS=@FIELD_OBS, RECOMMENDATION_DESC=@RECOMMENDATION_DESC, COMMENTS=@COMMENTS, IMPRVMNT_STAGE=@IMPRVMNT_STAGE, SOURCE=@SOURCE, MISC_INFO=@MISC_INFO WHERE OBJECTID=@IssueID"
         End If
 
         Select Case cfidRecord.COUNTY
@@ -286,8 +306,8 @@ Public Class FilterData
         cmd.Parameters.AddWithValue("SOURCE", cfidRecord.SOURCE)
         cmd.Parameters.AddWithValue("MISC_INFO", cfidRecord.MISC_INFO)
 
-        If cfidRecord.OID > 0 Then
-            cmd.Parameters.AddWithValue("OBJECTID", cfidRecord.OID)
+        If cfidRecord.IssueID > 0 Then
+            cmd.Parameters.AddWithValue("IsssueID", cfidRecord.IssueID)
         End If
 
         Try
@@ -297,10 +317,10 @@ Public Class FilterData
             Throw
         End Try
 
-        'get new OID
-        If cfidRecord.OID = 0 Then
+        'get new IssueID
+        If cfidRecord.IssueID = 0 Then
             cmd.CommandText = "SELECT @@IDENTITY"
-            cfidRecord.OID = cmd.ExecuteScalar
+            cfidRecord.IssueID = cmd.ExecuteScalar
         End If
         dbconn.Close()
 
