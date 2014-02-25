@@ -618,9 +618,13 @@ define("agsjs/dijit/TOC",
     
       var url = '';
       if (this.rootLayer.version >= 10.01) {
-        url = this.rootLayer.url + '/legend';
+          url = this.rootLayer.url + '/legend';
       } else {
-        url = 'http://www.arcgis.com/sharing/tools/legend';
+        if (this.rootLayer.url.substring(0, 5) == "https") {
+          url = 'https://www.arcgis.com/sharing/tools/legend';
+        } else {
+          url = 'http://www.arcgis.com/sharing/tools/legend';
+        }
         var i = this.rootLayer.url.toLowerCase().indexOf('/rest/');
         var soap = this.rootLayer.url.substring(0, i) + this.rootLayer.url.substring(i + 5);
         url = url + '?soapUrl=' + escape(soap);
@@ -742,7 +746,7 @@ define("agsjs/dijit/TOC",
       // set the actual individual layerInfo's visibility after service's setVisibility call.
       if (!doNotRefresh) {
         array.forEach(this.rootLayer.layerInfos, function(layerInfo){
-          if (array.indexOf(visLayers, layerInfo.id) != -1) {
+          if (array.indexOf(visLayers, layerInfo.id) != -1 && (layerInfo._parentLayerInfo == null || layerInfo._parentLayerInfo.visible)) {
             layerInfo.visible = true;
           } else if (!layerInfo._subLayerInfos) {
             layerInfo.visible = false;

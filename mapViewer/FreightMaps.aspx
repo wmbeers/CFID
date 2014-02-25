@@ -4,14 +4,15 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Freight Maps</title>
-    <link rel="stylesheet" href="http://js.arcgis.com/3.7/js/esri/css/esri.css" />
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
+    <title>Freight Moves Tampa Bay Map Viewer</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.7/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
     <link rel="Stylesheet" href="css/jquery.dataTables.css" />
     <link rel="stylesheet" href="agsjs/css/agsjs.css" />
     <style type="text/css">
         html, body, #container, #mapDiv, #leftBarDiv
         {
+            font-family: Verdana, Arial, sans-serif;
             padding: 0;
             height: 100%;
         }
@@ -24,10 +25,7 @@
         
         #mapDiv
         {
-            margin-left: 0;
-            margin-right: 0;
-            margin-top: 0;
-            margin-bottom: 0;
+            margin: 0;
             float: right;
             width: 80%;
         }
@@ -59,8 +57,8 @@
             text-align: left;
         }
     </style>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="scripts/jQuery.dataTables.js"></script>
     <script src="../Scripts/knockout-2.3.0.js" type="text/javascript"></script>
     <script src="../Scripts/knockout.validation.debug.js" type="text/javascript"></script>
@@ -72,7 +70,7 @@
             }
         };
     </script>
-    <script type="text/javascript" src="http://js.arcgis.com/3.7/"></script> <!--NOTE: it's very important that djConfig is defined before referencing js.arcgis.com-->
+    <script type="text/javascript" src="https://js.arcgis.com/3.7/"></script> <!--NOTE: it's very important that djConfig is defined before referencing js.arcgis.com-->
     <script type="text/javascript">
         var map, freightMap, toc, identifyParams, toolBar, clickHandler;
         
@@ -92,7 +90,8 @@
 			 Map, Extent, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
 			 SimpleFillSymbol, ClassBreaksRenderer,
 			 TOC) {
-			     parser.parse();
+
+			     parser.parse();
 
 			     map = new esri.Map("mapDiv", {
 			         extent: new esri.geometry.Extent({ "xmin": -9353446.277197964, "ymin": 3101203.111585402, "xmax": -8942520.813137054, "ymax": 3380656.8869958716, "spatialReference": { "wkid": 102100 } }),
@@ -122,19 +121,18 @@
 
 			     //TODO: point to correct service, and add any parameters
 			     freightMapServiceLayer = new esri.layers.ArcGISDynamicMapServiceLayer(
-                     "http://webgis.ursokr.com/arcgis/rest/services/TAL/Regional_FreightNetwork/MapServer",
+                     "http://webgis.ursokr.com/arcgis/rest/services/TAL/FreightMovesTampaBay2/MapServer",
                      {"imageParameters": imageParameters}
                  );
 
 			     toc = new TOC({
 			         map: map,
 			         layerInfos: [{
-			             layer: freightMapServiceLayer,
-			             title: "Freight Network Map"
+			             layer: freightMapServiceLayer, title: ""
 			         }]
 			     }, 'tocDiv');
 			     toc.startup();
-
+                 
 			     //Add layer to map
 			     map.addLayer(freightMapServiceLayer);
 
@@ -180,8 +178,8 @@
 <body>
     <div id="container">
         <div id="leftBarDiv">
-            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logo.jpg" />
-            <h2>Table of Contents</h2>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/FDOTLogo.png" />
+            <h2>Interactive Freight Maps</h2>
             <div id="tocDiv"></div>
         </div>
         <div id="mapDiv">
