@@ -10,40 +10,38 @@
     <link rel="Stylesheet" href="css/jquery.dataTables.css" />
     <link rel="stylesheet" href="agsjs/css/agsjs.css" />
     <style type="text/css">
-        html, body, #container, #mapDiv, #leftBarDiv
-        {
+        html, body, #container, #mapDiv {
             font-family: Verdana, Arial, sans-serif;
             padding: 0;
             height: 100%;
         }
-        
-        html, body, #container
-        {
+
+        html, body, #container {
             margin: 0;
             font-size: 8pt;
         }
-        
-        #mapDiv
-        {
+
+        #mapDiv {
             margin: 0;
-            float: right;
-            width: 80%;
+            width: 100%;
+            height: 100%
         }
-        
-        #leftBarDiv
-        {
-            margin-left: 0;
-            margin-top: 0;
-            margin-bottom: 20px;
-            width: 20%;
-            float: left;
+
+        #leftBarDiv {
+            position:absolute;
+            left: 20px;
+            top: 20px;
+            max-height: 90%;
+            padding: 10px;
+            width: 370px;
             background-color: #E3F4FD;
             overflow: auto;
+            z-index: 1500;
+            border: 1px solid darkgray;
         }
-        
+
         /*CSS to style the loading text*/
-        #status
-        {
+        #status {
             background-color: black;
             color: white;
             padding: 3px;
@@ -51,10 +49,16 @@
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
         }
-        
-        .esriPopup TH
-        {
+
+        .esriPopup TH {
             text-align: left;
+        }
+
+
+        div.agsjsTOCRootLayer input[type=checkbox]
+        {
+            display:none;
+                                                  
         }
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
@@ -70,7 +74,8 @@
             }
         };
     </script>
-    <script type="text/javascript" src="https://js.arcgis.com/3.7/"></script> <!--NOTE: it's very important that djConfig is defined before referencing js.arcgis.com-->
+    <script type="text/javascript" src="https://js.arcgis.com/3.7/"></script>
+    <!--NOTE: it's very important that djConfig is defined before referencing js.arcgis.com-->
     <script type="text/javascript">
         var map, freightMap, toc, identifyParams, toolBar, clickHandler;
         
@@ -94,10 +99,13 @@
 			     parser.parse();
 
 			     map = new esri.Map("mapDiv", {
-			         extent: new esri.geometry.Extent({ "xmin": -9353446.277197964, "ymin": 3101203.111585402, "xmax": -8942520.813137054, "ymax": 3380656.8869958716, "spatialReference": { "wkid": 102100 } }),
+			         //{ "xmin": -9353446.277197964, "ymin": 3101203.111585402, "xmax": -8942520.813137054, "ymax": 3380656.8869958716, "spatialReference": { "wkid": 102100 } }
+			         extent: new esri.geometry.Extent({ "xmin": -9403446.277197964, "ymin": 3101203.111585402, "xmax": -9032520.813137054, "ymax": 3380656.8869958716, "spatialReference": { "wkid": 102100 } }),
+			         //center: new esri.geometry.Point(-9207983, 3240929.5, new esri.SpatialReference(102100)),
+                     //zoom: 10,
 			         nav: true,
 			         sliderStyle: "large",
-			         basemap: "gray"
+			         basemap: "streets"
 			     });
 
 			     map.showZoomSlider();
@@ -119,25 +127,62 @@
 			     //imageParameters.layerOption = esri.layers.ImageParameters.LAYER_OPTION_SHOW;
 			     //imageParameters.transparent = true;
 
-			     //TODO: point to correct service, and add any parameters
-			     freightMapServiceLayer = new esri.layers.ArcGISDynamicMapServiceLayer(
-                     "http://webgis.ursokr.com/arcgis/rest/services/TAL/FreightMovesTampaBay2/MapServer",
+			     /*
+                 Freight_FreightCorridorBasedProjectNeeds
+                 Freight_PriorityFreightInvestments
+                 Freight_RegionalFreightNetwork
+                 Freight_RegionalIntermodalFacilities
+                 Freight_FreightActivityIntensity
+                     */
+
+			     var freightCorridorBasedProjectNeeds = new esri.layers.ArcGISDynamicMapServiceLayer(
+                    "https://webgis.ursokr.com/arcgis/rest/services/TAL/Freight_FreightCorridorBasedProjectNeeds/MapServer",
+                    { "imageParameters": imageParameters }
+                 );
+			     var priorityFreightInvestments = new esri.layers.ArcGISDynamicMapServiceLayer(
+                     "https://webgis.ursokr.com/arcgis/rest/services/TAL/Freight_PriorityFreightInvestments/MapServer",
                      {"imageParameters": imageParameters}
                  );
+			     var regionalFreightNetwork= new esri.layers.ArcGISDynamicMapServiceLayer(
+                     "https://webgis.ursokr.com/arcgis/rest/services/TAL/Freight_RegionalFreightNetwork/MapServer",
+                     { "imageParameters": imageParameters }
+                 );
+			     var regionalIntermodalFacilities = new esri.layers.ArcGISDynamicMapServiceLayer(
+                    "https://webgis.ursokr.com/arcgis/rest/services/TAL/Freight_RegionalIntermodalFacilities/MapServer",
+                    { "imageParameters": imageParameters }
+                 );
+			     var freightActivityIntensity = new esri.layers.ArcGISDynamicMapServiceLayer(
+                    "https://webgis.ursokr.com/arcgis/rest/services/TAL/Freight_FreightActivityIntensity/MapServer",
+                    { "imageParameters": imageParameters }
+                 );
+			     freightActivityIntensity.opacity = 0.6;
+
+			     //Add layers to map viewer
+			     map.addLayer(freightActivityIntensity);
+			     map.addLayer(regionalFreightNetwork);
+			     map.addLayer(regionalIntermodalFacilities);
+			     map.addLayer(freightCorridorBasedProjectNeeds);
+			     map.addLayer(priorityFreightInvestments);
+			     
 
 			     toc = new TOC({
 			         map: map,
-			         layerInfos: [{
-			             layer: freightMapServiceLayer, title: ""
-			         }]
+			         layerInfos: [
+                         { layer: priorityFreightInvestments, title: "Priority Freight Investments" },
+			             { layer: freightCorridorBasedProjectNeeds, title: "Freight Corridor-Based Project Needs" },
+                         { layer: regionalFreightNetwork, title: "Regional Freight Network" },
+                         { layer: regionalIntermodalFacilities, title: "Regional Intermodal Facilities" },
+                         { layer: freightActivityIntensity, title: "Freight Activity Centers" }
+			         ]
 			     }, 'tocDiv');
 			     toc.startup();
                  
-			     //Add layer to map
-			     map.addLayer(freightMapServiceLayer);
 
 			 });
 
+        function toggleBasemap(basemap) {
+            map.setBasemap(basemap);
+        }
         
         
         //handles click event to initiate identify task
@@ -180,7 +225,17 @@
         <div id="leftBarDiv">
             <asp:Image ID="Image1" runat="server" ImageUrl="~/images/FDOTLogo.png" />
             <h2>Interactive Freight Maps</h2>
-            <div id="tocDiv"></div>
+            <fieldset>
+                <legend>Legend</legend>
+                <div id="tocDiv"></div>
+            </fieldset>
+            <fieldset>
+                <legend>Basemap</legend>
+                <div>
+                    <input type="radio" name="basemapOption" id="basemapOptionStreets" value="streets" checked="checked" onclick="toggleBasemap('streets');"/><label for="basemapOptionStreets">Streets</label>
+                    <input type="radio" name="basemapOption" id="basemapOptionGray" value="gray" onclick="toggleBasemap('gray');" /><label for="basemapOptionGray">Gray</label>
+                </div>
+            </fieldset>
         </div>
         <div id="mapDiv">
         </div>

@@ -18,6 +18,7 @@
 }
 
 .agsjsTOCRootLayer {
+    margin-top:5px;
 }
 
 .agsjsTOCRootLayerLabel {
@@ -34,7 +35,7 @@
 }
 
 .agsjsTOCServiceLayer {
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .agsjsTOCServiceLayerLabel {
