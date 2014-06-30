@@ -1,0 +1,29 @@
+DDC Collision Prevention Formula
+1. Recognize the hazard
+2. Understand the defense
+3. Act Correctly, in time
+
+Matching domain-constrained fields
+1: If direct match to LU record, use it
+2: Check for synonym, use match from synomym table
+3: If no match, track in dictionary <string, list<int>> (string is input value, list of int are row numbers affected)
+
+Present to user:
+ The following values were imported that do not exist in the ____ lookup table
+ Value: _________ Match to: [ drop-down list or auto-complete]
+ [] Add to lookup table (displayed only if allowed)
+ 
+RAW_STATION_NAME
+RAW_MATRIX
+RAW_PARAMETER
+RAW_VALUE_QUALIFIER => List<Qualifier>
+LAB_PREP_METHOD
+RAW_ANALYSIS_TYPE
+RAW_UNITS
+RAW_SAMPLE_FRACTION
+
+
+
+
+Great newborn herds a screw
+
