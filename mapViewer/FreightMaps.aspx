@@ -14,29 +14,28 @@
             font-family: Verdana, Arial, sans-serif;
             padding: 0;
             height: 100%;
-        }
-
-        html, body, #container {
             margin: 0;
             font-size: 8pt;
         }
 
+        #container
+        { min-width: 900px;
+          overflow: hidden;
+        }
+
         #mapDiv {
-            margin: 0;
-            width: 100%;
-            height: 100%
+            width: 500px; /* overriden by javascript on load and resize */
+            height: 100%;
+            float: right;
         }
 
         #leftBarDiv {
-            position:absolute;
-            left: 20px;
-            top: 20px;
-            max-height: 90%;
+            float:left;
+            height: 100%;
             padding: 10px;
-            width: 370px;
+            width: 402px;
             background-color: #E3F4FD;
             overflow: auto;
-            z-index: 1500;
             border: 1px solid darkgray;
         }
 
@@ -64,21 +63,32 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="scripts/jQuery.dataTables.js"></script>
-    <script src="../Scripts/knockout-2.3.0.js" type="text/javascript"></script>
-    <script src="../Scripts/knockout.validation.debug.js" type="text/javascript"></script>
-    <script src="../Scripts/knockout-jQueryUI-Bindings.js" type="text/javascript"></script>
     <script type="text/javascript">
         var djConfig = {
             paths: {
                 "agsjs": location.pathname.replace(/\/[^/]+$/, "") + '/agsjs'
             }
         };
-    </script>
+
+     </script>
     <script type="text/javascript" src="https://js.arcgis.com/3.7/"></script>
     <!--NOTE: it's very important that djConfig is defined before referencing js.arcgis.com-->
     <script type="text/javascript">
         var map, freightMap, toc, identifyParams, toolBar, clickHandler;
         
+        function resizeMap() {
+            var width = jQuery("#container").width() - 425;
+            if (width < 20) width=20;
+            jQuery("#mapDiv").width(width);
+        }
+
+
+        jQuery("document").ready(function () {
+            resizeMap();
+            jQuery(window).resize(function () { resizeMap(); });
+        });
+        //TODO: see http://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-or-resize-event-and-only-then-perform-an-ac
+
         require(["dojo/_base/connect",
 			 "dojo/dom", "dojo/parser","dojo/on", "dojo/_base/Color",
 			 "esri/map",
@@ -184,6 +194,7 @@
             map.setBasemap(basemap);
         }
         
+
         
         //handles click event to initiate identify task
         function identify(evt) {

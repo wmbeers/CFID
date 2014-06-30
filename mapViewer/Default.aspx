@@ -385,12 +385,18 @@
             jQuery("#spatialFilterOption").buttonset();
 
 
+
             //openRecord(1450);
         } // end init
 
 
         //call init function when page is fully loaded and dojo initialized
         dojo.ready(init);
+
+        function toggleBasemap(basemap) {
+            map.setBasemap(basemap);
+        }
+
 
 
     </script>
@@ -415,14 +421,20 @@
                 <br />
                 <button data-bind="click: addRecord" title="Click to add a new record">
                     Add Record</button>
-               
+
                     <script language="javascript" type="text/javascript">
                         function test() {
                             alert(jQuery('label[for="CORRIDOR"]').length);
                         }
                     
                     </script>
-
+                <fieldset>
+                    <legend>Basemap</legend>
+                    <div>
+                        <input type="radio" name="basemapOption" id="basemapOptionStreets" value="streets" checked="checked" onclick="toggleBasemap('streets');"/><label for="basemapOptionStreets">Streets</label>
+                        <input type="radio" name="basemapOption" id="basemapOptionGray" value="gray" onclick="toggleBasemap('gray');" /><label for="basemapOptionGray">Gray</label>
+                    </div>
+                </fieldset>
                 <button onclick="showDebug(); return false;" style="display: none">
                     Show Debug</button>
             </div>

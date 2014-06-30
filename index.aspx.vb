@@ -43,10 +43,10 @@ Partial Class index
                         lblMessage.Text = "<font color=red><strong>User Name or Password Incorrect !!!</strong></font>"
                     End If
                 Else
-                    lblMessage.Text = "UserName and password can,t be blank"
+                    lblMessage.Text = "UserName and password can't be blank"
                 End If
             Else
-                lblMessage.Text = "UserName and password can,t be blank"
+                lblMessage.Text = "UserName and password can't be blank"
             End If
         Catch ex As Exception
             pnlMessage.Visible = True
