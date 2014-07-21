@@ -1,6 +1,10 @@
 ﻿Imports Microsoft.VisualBasic
 
 Public Class CFIDRecord
+    Public Const IssueExtentSpecificLocation As String = "Specific Location"
+    Public Const IssueExtentCorridor As String = "Corridor"
+
+
     Public IssueID As Integer
     Public FDOT_District As String
     Public COUNTY As String
@@ -79,7 +83,7 @@ Public Class CFIDRecord
     Public COMMENTS As String = ""
     Public IMPRVMNT_STAGE As String
     Public SOURCE As String
-    'Public DATE_MODIFIED As String
+    Public DATE_MODIFIED As String
     Public MISC_INFO As String
 
 End Class

@@ -4,7 +4,7 @@
 <%--<asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="ContentPlaceHolder1"> --%> 
   <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" Runat="Server">
       <center>
-      <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/logo-login-page.jpg" />
+      <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/logo-login-page-cfid.jpg" />
       <hgroup class="title">
         <h1><%: Title %>.</h1>
     </hgroup>

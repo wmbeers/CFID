@@ -125,7 +125,7 @@ function CFIDRecord(m) {
     this.STRUCTURECONSTRAINT = ko.observable(m.STRUCTURECONSTRAINT).extend({ required: true });
     this.OTHERCONSTRAINT = ko.observable(m.OTHERCONSTRAINT).extend({ required: true });
     this.FieldVerified = ko.observable(m.FieldVerified);
-    this.YearRecommended = ko.validatedObservable(m.YearRecommended).extend({ required: true, minLength: 4, maxLength: 4, digit: true });
+    this.YearRecommended = ko.validatedObservable(m.YearRecommended).extend({ required: true, digit: true }); // minLength: 4, maxLength: 4, <--Doesn't work, because YearRecommended is an integer, validation function tries to use the length property of a string on it.
     this.ROADWAYID = ko.validatedObservable(m.ROADWAYID).extend({ required: true, minLength: 8, maxLength: 8, digit: true });
     this.BEGMP = ko.validatedObservable(m.BEGMP).extend(
         { required:
@@ -164,9 +164,9 @@ function CFIDRecord(m) {
         });
     this.TRANSPORT_SYSTEM = ko.validatedObservable(m.TRANSPORT_SYSTEM).extend({ required: true });
     this.FREIGHT_SYSTEM = ko.validatedObservable(m.FREIGHT_SYSTEM).extend({ required: true });
-    this.FIELD_OBS = ko.validatedObservable(m.FIELD_OBS).extend({maxLength: 255});
-    this.RECOMMENDATION_DESC = ko.validatedObservable(m.RECOMMENDATION_DESC).extend({maxLength: 255});
-    this.COMMENTS = ko.validatedObservable(m.COMMENTS).extend({ maxLength: 255 }); ;
+    this.FIELD_OBS = ko.validatedObservable(m.FIELD_OBS); // changed to nvarchar max, no limit .extend({maxLength: 255});
+    this.RECOMMENDATION_DESC = ko.validatedObservable(m.RECOMMENDATION_DESC); // changed to nvarchar max, no limit .extend({maxLength: 255});
+    this.COMMENTS = ko.validatedObservable(m.COMMENTS); // changed to nvarchar max, no limit .extend({ maxLength: 255 }); ;
     this.IMPRVMNT_STAGE = '';
     this.SOURCE = ko.validatedObservable(m.SOURCE).extend({ required: true});
     //this.DATE_MODIFIED = '';
@@ -193,17 +193,17 @@ function CFIDRecord(m) {
 
             jQuery.ajax({
                 "type": "POST",
-                "url": "../FilterData.asmx/SaveRecord",
+                "url": "FilterData.asmx/SaveRecord",
                 "contentType": "application/json; charset=utf-8",
                 "data": data,
                 "dataType": "json",
                 "success": function (data) {
-                    RootViewModel.cfidRecord(new CFIDRecord(data.d[0])); //read back into local object, will now have the new ID
+                    //RootViewModel.cfidRecord(new CFIDRecord(data.d[0])); //read back into local object, will now have the new ID
                     jQuery("#editDialog").dialog("close");
                     //TODO: better confirmation? alerts are so annoying
-                    alert("Saved Record #" + RootViewModel.cfidRecord().IssueID);
+                    alert("Saved Record #" + data.d.IssueID);
                 }, // end success callback function,
-                error: function (e) {
+                "error": function (e) {
                     alert("Error saving record: " + e.responseText);
                 }
             });
@@ -254,6 +254,8 @@ function CFIDRecord(m) {
             { text: "Cancel", click: self.cancelChanges}];
         return o;
     });
+
+
 //    this.canSaveSubscription = this.canSave.subscribe(function (newValue) {
 //        console.log("canSaveSubscription " + newValue);
 //        jQuery("#editDialog").dialog("option", "buttons", [
@@ -263,6 +265,18 @@ function CFIDRecord(m) {
 //    });
 }
 
+
+CFIDRecord.prototype.toJSON = function () {
+    var copy = ko.toJS(this); //easy way to get a clean copy
+   
+    delete copy.issueDescriptions;
+    delete copy.isSpecificLocation;
+    delete copy.isCorridor;
+    delete copy.canSave;
+    delete copy.dialogOptions;
+
+    return copy; //return the copy to be serialized
+};
 
 function selectFromMap() {
     dojo.disconnect(clickHandler);

@@ -454,7 +454,7 @@
     </script>
     <div id="container">
         <div id="filterOptionsDiv">
-            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logonew.png" />
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logo-cfid.png" />
             <div id="filterOptions">
             </div>
             <div id="controls">
@@ -464,7 +464,7 @@
                     Show Table</button>
                
                 <br />
-                <% If CanEdit Then%>
+                <% If CanEdit And False Then 'TODO: enable adding later %>
                 <button data-bind="click: addRecord" title="Click to add a new record">
                     Add Record</button>
                 <br />
