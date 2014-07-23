@@ -23,10 +23,7 @@
         
         #mapDiv
         {
-            margin-left: 0;
-            margin-right: 0;
-            margin-top: 0;
-            margin-bottom: 0;
+            margin: 0;
             float: right;
             width: 80%;
         }
@@ -35,7 +32,7 @@
         {
             margin-left: 0;
             margin-top: 0;
-            margin-bottom: 20;
+            margin-bottom: 20px;
             width: 20%;
             float: left;
             background-color: #E3F4FD;
@@ -439,10 +436,9 @@
             });*/
         });
 
-    </script>
-    <script>
-
-
+        function toggleBasemap(basemap) {
+            map.setBasemap(basemap);
+        }
 
     </script>
 </head>
@@ -499,6 +495,7 @@
                     <legend>Basemap</legend>
                     <div>
                         <input type="radio" name="basemapOption" id="basemapOptionStreets" value="streets" checked="checked" onclick="toggleBasemap('streets');"/><label for="basemapOptionStreets">Streets</label>
+                        <input type="radio" name="basemapOption" id="basemapOptionSatellite" value="satellite" onclick="toggleBasemap('satellite');" /><label for="basemapOptionSatellite">Satellite</label>
                         <input type="radio" name="basemapOption" id="basemapOptionGray" value="gray" onclick="toggleBasemap('gray');" /><label for="basemapOptionGray">Gray</label>
                     </div>
                 </fieldset>
