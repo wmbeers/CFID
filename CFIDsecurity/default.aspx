@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>CFID Map Viewer</title>
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
+    <link rel="stylesheet" href="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
     <link rel="Stylesheet" href="css/jquery.dataTables.css" />
     <style type="text/css">
         html, body, #container, #mapDiv, #filterOptionsDiv
@@ -103,14 +103,14 @@
             text-align: left;
         }
     </style>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="scripts/jQuery.dataTables.js"></script>
     <script src="Scripts/knockout-2.3.0.js" type="text/javascript"></script>
     <script src="Scripts/knockout.validation.debug.js" type="text/javascript"></script>
     <script src="Scripts/knockout-jQueryUI-Bindings.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/cfid.js"></script>
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+    <script type="text/javascript" src="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
     <script type="text/javascript">
         dojo.require("esri.map");
         dojo.require("esri.layers.FeatureLayer");
@@ -136,8 +136,8 @@
 
             //Initialize dynamic layers
             cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/0",
-            //TODO: for editing, use http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0
-			//cfidPointLayer = new esri.layers.FeatureLayer("http://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
+            //TODO: for editing, use https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0
+			//cfidPointLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["IssueID","SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
@@ -145,8 +145,8 @@
                 );
 
             cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/1",
-            //TODO: for editing, use http://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/1
-            //cfidLineLayer = new esri.layers.FeatureLayer("http://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/1",
+            //TODO: for editing, use https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/1
+            //cfidLineLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/1",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
