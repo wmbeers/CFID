@@ -112,10 +112,17 @@
     <script type="text/javascript" src="js/cfid.js"></script>
     <script type="text/javascript" src="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
     <script type="text/javascript">
+        
         dojo.require("esri.map");
         dojo.require("esri.layers.FeatureLayer");
         dojo.require("esri.tasks.query");
         dojo.require("esri.toolbars.draw");
+        dojo.require("esri.toolbars.edit");
+        dojo.require("esri.geometry.Geometry");
+        dojo.require("esri.geometry.Point");
+        dojo.require("esri.geometry.Polyline");
+        dojo.require("dojo._base.event");
+        dojo.require("dojo.on");
 
         var canEdit = <% =CanEdit.ToString().ToLower() %>;
 
@@ -135,8 +142,8 @@
         function init() {
 
             //Initialize dynamic layers
-            cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/0",
-            //TODO: for editing, use https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0
+            // REAL SERVER FOR LIVE USE cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/0",
+            /*TODO: for editing, use*/ cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0",
 			//cfidPointLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
@@ -144,8 +151,8 @@
                     }
                 );
 
-            cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/1",
-            //TODO: for editing, use https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/1
+            // REAL SERVER FOR LIVE USE cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/1",
+            /*TODO: for editing, use*/ cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/1",
             //cfidLineLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/1",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
@@ -171,7 +178,6 @@
 
             cfidPointLayer.setRenderer(new esri.renderer.SimpleRenderer(pointSymbol));
             cfidLineLayer.setRenderer(new esri.renderer.SimpleRenderer(lineSymbol));
-
 
             //Initialize the map
             map = new esri.Map("mapDiv", {
@@ -216,6 +222,66 @@
             //Add layers to map
             map.addLayer(cfidPointLayer, 0);
             map.addLayer(cfidLineLayer, 1);
+            
+
+            /* TESTING ALLOWING EDITING */
+            // Set up map layers for editing
+            function initEditing(evt) {
+                
+                var editLineLayer = map.getLayer(cfidLineLayer.id);
+                var editPointLayer = map.getLayer(cfidPointLayer.id); 
+          
+                var editLineToolbar = new esri.toolbars.Edit(map);
+                var editPointToolbar = new esri.toolbars.Edit(map);
+                                 
+                var editingEnabled = false; 
+
+                // Toggle editing when a line is double-clicked
+                editLineLayer.on("dbl-click", function(evt) { 
+                    // Cancel all events. Prevents map from zooming.
+                    evt.preventDefault();
+                    evt.stopPropagation(); 
+                    if (editingEnabled === false) { 
+                        editingEnabled = true; 
+                        editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES , evt.graphic);
+                        
+                    } else { 
+                        if ( editLineToolbar.getCurrentState().isModified ) {
+                            // Keep changes to the line
+                            editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null); 
+                            //TODO: Add the long/lang of the first and last points to the location data for this line
+                        }
+                        editLineToolbar.deactivate(); 
+                        editingEnabled = false; 
+                    } 
+                });
+
+                // Toggle editing when a point is double-clicked
+                editPointLayer.on("dbl-click", function(evt) { 
+                    // Cancel all events. Prevents map from zooming.
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    if (editingEnabled === false) { 
+                        editingEnabled = true; 
+                        editPointToolbar.activate(esri.toolbars.Edit.MOVE , evt.graphic); 
+                    } else { 
+                        if ( editPointToolbar.getCurrentState().isModified ) { 
+                            // Keep change to the point and store new location in database
+                            editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
+                            updatePointLocation(editPointToolbar.getCurrentState().graphic);
+                        }
+                        editPointToolbar.deactivate(); 
+                        editingEnabled = false; 
+                    } 
+                });
+            }; 
+
+            function updatePointLocation(newPoint) {
+                //TODO: Add new long/lang to database
+            }
+
+            /* TESTING ALLOWING EDITING END */
+
 
 
             //Add onClick handler to do custom identify task
@@ -279,6 +345,9 @@
                 updateFilter();
             });
 
+            // map.on wasn't working for adding this to the map itself so letting a button call this function for now.
+            jQuery("#testing").on("click", function (event) {initEditing(event);});
+
             //initialize filters
             //this is done client-side rather than with asp.net controls because we need the values of the checkboxes locally
             //and asp.net checkboxlist controls hide the values in viewstate
@@ -334,7 +403,7 @@
             dojo.connect(cfidPointLayer, "onUpdateEnd", function (evt) {
                 jQuery("#filterOptions input[type=checkbox]").removeAttr("disabled");
             });
-
+            
             //tablular results dialog
             jQuery("#tableDiv").dialog({
                 "autoOpen": false,
@@ -460,6 +529,13 @@
                     Show Table</button>
                
                 <br />
+
+                <!-- TEST -->
+                <br />
+                <button id="testing" title="Edit Map">Edit Map</button>
+                <br />
+                <!-- TEST -->
+
                 <% If CanEdit And False Then 'TODO: enable adding later %>
                 <button data-bind="click: addRecord" title="Click to add a new record">
                     Add Record</button>
