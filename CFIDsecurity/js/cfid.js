@@ -342,6 +342,105 @@ function openMoreInfo(issueID) {
     jQuery("#ViewRecordsForm").submit();
 }
 
+/* TESTING ALLOWING EDITING */
+// Set up map layers for editing
+function initEditing(evt) {
+
+    var editLineLayer = map.getLayer(cfidLineLayer.id);
+    var editPointLayer = map.getLayer(cfidPointLayer.id);
+
+    var editLineToolbar = new esri.toolbars.Edit(map);
+    var editPointToolbar = new esri.toolbars.Edit(map);
+
+    var editingEnabled = false;
+    var originalEvent = evt;
+
+    // Toggle editing when a line is double-clicked
+    jQuery("#editMapBtn").on("click", function (evt) {
+        // Cancel all events. Prevents map from zooming.
+        evt.preventDefault();
+        evt.stopPropagation();
+        if (editingEnabled === false) {
+            editingEnabled = true;
+
+            if (originalEvent.graphic.geometry.type == "polyline") {
+                editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, originalEvent.graphic);
+            }
+
+            else if (originalEvent.graphic.geometry.type == "point") {
+                editPointToolbar.activate(esri.toolbars.Edit.MOVE, originalEvent.graphic);
+            }
+
+        } else {
+            if (editLineToolbar.getCurrentState().isModified) {
+                // Keep changes to the line
+                editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null);
+                //TODO: Add the long/lang of the first and last points to the location data for this line
+            }
+            if (editPointToolbar.getCurrentState().isModified) {
+                // Keep change to the point and store new location in database
+                editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
+                updatePointLocation(editPointToolbar.getCurrentState().graphic);
+            }
+            editLineToolbar.deactivate();
+            editPointToolbar.deactivate();
+            editingEnabled = false;
+        }
+    });
+}
+function initEditingOld(evt) {
+
+    var editLineLayer = map.getLayer(cfidLineLayer.id);
+    var editPointLayer = map.getLayer(cfidPointLayer.id);
+
+    var editLineToolbar = new esri.toolbars.Edit(map);
+    var editPointToolbar = new esri.toolbars.Edit(map);
+
+    var editingEnabled = false;
+
+
+
+    // Toggle editing when a line is double-clicked
+    editLineLayer.on("dbl-click", function (evt) {
+        // Cancel all events. Prevents map from zooming.
+        evt.preventDefault();
+        evt.stopPropagation();
+        if (editingEnabled === false) {
+            editingEnabled = true;
+            editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, evt.graphic);
+
+        } else {
+            if (editLineToolbar.getCurrentState().isModified) {
+                // Keep changes to the line
+                editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null);
+                //TODO: Add the long/lang of the first and last points to the location data for this line
+            }
+            editLineToolbar.deactivate();
+            editingEnabled = false;
+        }
+    });
+
+    // Toggle editing when a point is double-clicked
+    editPointLayer.on("dbl-click", function (evt) {
+        // Cancel all events. Prevents map from zooming.
+        evt.preventDefault();
+        evt.stopPropagation();
+        if (editingEnabled === false) {
+            editingEnabled = true;
+            editPointToolbar.activate(esri.toolbars.Edit.MOVE, evt.graphic);
+        } else {
+            if (editPointToolbar.getCurrentState().isModified) {
+                // Keep change to the point and store new location in database
+                editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
+                updatePointLocation(editPointToolbar.getCurrentState().graphic);
+            }
+            editPointToolbar.deactivate();
+            editingEnabled = false;
+        }
+    });
+}
+/* TESTING ALLOWING EDITING END */
+
 function openReport() {
     var issueIds = jQuery("#tableDiv").data("issueIds");
 
@@ -382,6 +481,7 @@ function identify(evt) {
     // array of features.
     map.infoWindow.setFeatures([deferred]);
     map.infoWindow.show(evt.mapPoint);
+    initEditing(evt);
 }
 
 

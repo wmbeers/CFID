@@ -123,6 +123,7 @@
         dojo.require("esri.geometry.Polyline");
         dojo.require("dojo._base.event");
         dojo.require("dojo.on");
+        dojo.require("dojo.dom");
 
         var canEdit = <% =CanEdit.ToString().ToLower() %>;
 
@@ -193,7 +194,7 @@
             dojo.create("a", {
                 "class": "action",
                 "innerHTML": "More Info",
-                "onClick": "openMoreInfo()",
+                "onClick": "openMoreInfo(event)",
                 "href": "javascript:void(0)"
             }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
 
@@ -201,8 +202,17 @@
             if (canEdit) {
                 dojo.create("a", {
                     "class": "action",
-                    "innerHTML": "Edit",
+                    "innerHTML": "Edit Record",
                     "onClick": "openRecord()",
+                    "href": "javascript:void(0)"
+                }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
+
+                //Add link to edit map
+                dojo.create("a", {
+                    "class": "action",
+                    "id" : "editMapBtn",
+                    "innerHTML": "Edit Map",
+                    "onClick": "initEditing(event)",
                     "href": "javascript:void(0)"
                 }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
             }
@@ -223,67 +233,6 @@
             map.addLayer(cfidPointLayer, 0);
             map.addLayer(cfidLineLayer, 1);
             
-
-            /* TESTING ALLOWING EDITING */
-            // Set up map layers for editing
-            function initEditing(evt) {
-                
-                var editLineLayer = map.getLayer(cfidLineLayer.id);
-                var editPointLayer = map.getLayer(cfidPointLayer.id); 
-          
-                var editLineToolbar = new esri.toolbars.Edit(map);
-                var editPointToolbar = new esri.toolbars.Edit(map);
-                                 
-                var editingEnabled = false; 
-
-                // Toggle editing when a line is double-clicked
-                editLineLayer.on("dbl-click", function(evt) { 
-                    // Cancel all events. Prevents map from zooming.
-                    evt.preventDefault();
-                    evt.stopPropagation(); 
-                    if (editingEnabled === false) { 
-                        editingEnabled = true; 
-                        editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES , evt.graphic);
-                        
-                    } else { 
-                        if ( editLineToolbar.getCurrentState().isModified ) {
-                            // Keep changes to the line
-                            editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null); 
-                            //TODO: Add the long/lang of the first and last points to the location data for this line
-                        }
-                        editLineToolbar.deactivate(); 
-                        editingEnabled = false; 
-                    } 
-                });
-
-                // Toggle editing when a point is double-clicked
-                editPointLayer.on("dbl-click", function(evt) { 
-                    // Cancel all events. Prevents map from zooming.
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    if (editingEnabled === false) { 
-                        editingEnabled = true; 
-                        editPointToolbar.activate(esri.toolbars.Edit.MOVE , evt.graphic); 
-                    } else { 
-                        if ( editPointToolbar.getCurrentState().isModified ) { 
-                            // Keep change to the point and store new location in database
-                            editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
-                            updatePointLocation(editPointToolbar.getCurrentState().graphic);
-                        }
-                        editPointToolbar.deactivate(); 
-                        editingEnabled = false; 
-                    } 
-                });
-            }; 
-
-            function updatePointLocation(newPoint) {
-                //TODO: Add new long/lang to database
-            }
-
-            /* TESTING ALLOWING EDITING END */
-
-
-
             //Add onClick handler to do custom identify task
             clickHandler = dojo.connect(map, "onClick", identify);
 
