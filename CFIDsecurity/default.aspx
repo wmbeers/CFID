@@ -250,18 +250,13 @@
             infoTemplate = new esri.InfoTemplate("Issue #: ${IssueID}",
                 "<table><tr><th>District</th><td>${FDOT_District}</td></tr>" +
                 "<tr><th>County</th><td>${COUNTY}</td></tr>" +
-                "<tr><th>Corridor</th><td>${CORRIDOR}</td></tr>" +
-                "<tr><th>Extent</th><td>${ISSUE_EXTENT}</td></tr>" +
                 "<tr><th>Site Location</th><td>${SITE_LOCATION}</td></tr>" +
                 "<tr><th>U.S. Road</th><td>${USROAD}</td></tr>" +
                 "<tr><th>State Road</th><td>${STATEROAD}</td></tr>" +
                 "<tr><th>Local Road</th><td>${LOCALROAD}</td></tr>" +
-                "<tr><th>To</th><td>${SEGMENT_TO}</td></tr>" +
-                "<tr><th>From</th><td>${SEGMENT_FROM}</td></tr>" +
                 "<tr><th>Issue Location</th><td>${ISSUESITELOC}</td></tr>" +
                 "<tr><th>Freight Need</th><td>${FREIGHT_NEED}</td></tr>" +
                 "<tr><th>Issue Description</th><td>${ISSUE_DESCRIPTION}</td></tr>" +
-                "<tr><th>Corridor Segment</th><td>${CORRIDOR_SEGMENT}</td></tr>" +
                 "<tr><th>Priority</th><td>${PRIORITY}</td></tr>" +
                 "<tr><th>Implementation Ease</th><td>${EASE}</td></tr>" +
                 "<tr><th colspan='2' style='border-bottom: 1px solid'>Constraints</th></tr>" +
@@ -594,20 +589,7 @@
                 <label for="SITE_LOCATION">Segment Location</label>
                 <input type="text" id="SITE_LOCATION" data-bind="value:SITE_LOCATION" title="Descriptive value representing exact location of improvement (US 19 and 54 Ave. North).<br/>Max Characters=100" /><br />
 
-                <label for="CORRIDOR">Corridor Name</label>
-                <input type="text" id="CORRIDOR" data-bind="value:CORRIDOR" /><br />
-            
-                <label for="SEGMENT_FROM">From</label>
-                <input type="text" id="SEGMENT_FROM" data-bind="value:SEGMENT_FROM" title="Descriptive value of start of Freight Corridor. Only use when referencing a Freight Corridor Screening Report corridor, (ex. US 19)." /><br />
-
-                <label for="SEGMENT_TO">To</label>
-                <input type="text" id="SEGMENT_TO" data-bind="value:SEGMENT_TO" title="Descriptive value of end of Freight Corridor. Only use when referencing a Freight Corridor Screening Report corridor, (ex. US 19)." /><br />
-
             </fieldset>
-
-            
-            <label for="ISSUE_EXTENT">Issue Extent</label>
-            <select id="ISSUE_EXTENT" data-bind="options: $root.issueExtent, value:ISSUE_EXTENT" title="Specific Location: Refers to site specific issue, such as an intersection imrpovement. Corridor: Refers to an improvement recommended for an entire corridor, such as a safety, capacity, or maintenance improvement."></select><br />
             
             <label for="FREIGHT_NEED">Freight Need</label>
             <select id="FREIGHT_NEED" data-bind="options: $root.freightNeed, optionsCaption: '-Select a value-', value:FREIGHT_NEED"></select><br />
@@ -713,14 +695,6 @@
 
                 <label for="SECONDRDWYID">Secondary Roadway ID</label>
                 <input type="text" id="SECONDRDWYID" data-bind="value:SECONDRDWYID" title="FDOT Roadway value provided in TSO basemap, 8 digits (ex.02080001 or 15060000)" /><br />
-
-                <span data-bind="visible: isCorridor">
-                    <label for="BEGMP">Begin Milepost</label>
-                    <input type="text" id="BEGMP" data-bind="value:BEGMP" title="Beginning Milepost of Corridor (Only use if defining a corridor improvement. use up to 3 decimal places, ex. 2.135)" /><br />
-
-                    <label for="ENDMP">End Milepost</label>
-                    <input type="text" id="ENDMP" data-bind="value:ENDMP" title="Ending Milepost of Corridor (Only use if defining a corridor improvement. use up to 3 decimal places, ex. 2.135)" />
-                </span>
             </fieldset>
 
             <fieldset data-bind="visible: isSpecificLocation">
