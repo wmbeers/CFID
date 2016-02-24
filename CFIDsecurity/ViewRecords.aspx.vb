@@ -21,10 +21,8 @@ Partial Public Class ViewRecords
                 Throw New Exception("CFID record # not provided")
             End If
             'TODO: leaves us open to SQL Injection attack!
-            Dim sql = "Select IssueID, FDOT_District, COUNTY, CORRIDOR, ISSUE_EXTENT, SITE_LOCATION, SEGMENT_TO, SEGMENT_FROM, ISSUESITELOC, FREIGHT_NEED, ISSUE_DESCRIPTION, CORRIDOR_SEGMENT, PRIORITY, EASE, ROWCONSTRAINT, UTILITYCONSTRAINT, LIGHTPOLECONSTRAINT, SIGNAGECONSTRAINT, STRUCTURECONSTRAINT, OTHERCONSTRAINT, FIELD_VERIFIED, DATE_RECOMMENDED, ROADWAYID, BEGMP, ENDMP, SECONDRDWYID, LOCMP, LATY, LONX, LAT, LON, TRANSPORT_SYSTEM, FREIGHT_SYSTEM, FIELD_OBS, RECOMMENDATION_DESC, COMMENTS, IMPRVMNT_STAGE, IMPRVMNT_STAGE_NAME, SOURCE, DATE_MODIFIED, MISC_INFO " & _
-                "From cfid_point Where issueID in (" & Request.Form("issueIds").ToString() & ") union " & _
-                "Select IssueID, FDOT_District, COUNTY, CORRIDOR, ISSUE_EXTENT, SITE_LOCATION, SEGMENT_TO, SEGMENT_FROM, ISSUESITELOC, FREIGHT_NEED, ISSUE_DESCRIPTION, CORRIDOR_SEGMENT, PRIORITY, EASE, ROWCONSTRAINT, UTILITYCONSTRAINT, LIGHTPOLECONSTRAINT, SIGNAGECONSTRAINT, STRUCTURECONSTRAINT, OTHERCONSTRAINT, FIELD_VERIFIED, DATE_RECOMMENDED, ROADWAYID, BEGMP, ENDMP, SECONDRDWYID, LOCMP, LATY, LONX, LAT, LON, TRANSPORT_SYSTEM, FREIGHT_SYSTEM, FIELD_OBS, RECOMMENDATION_DESC, COMMENTS, IMPRVMNT_STAGE, IMPRVMNT_STAGE_NAME, SOURCE, DATE_MODIFIED, MISC_INFO  " & _
-                "From cfid_line Where issueID in (" & Request.Form("issueIds").ToString() & ")"
+            Dim sql = "Select IssueID, FDOT_District, COUNTY, SITE_LOCATION, ISSUESITELOC, ISSUE_DESCRIPTION, CORRIDOR_SEGMENT, EASE, ROWCONSTRAINT, UTILITYCONSTRAINT, LIGHTPOLECONSTRAINT, SIGNAGECONSTRAINT, STRUCTURECONSTRAINT, OTHERCONSTAINT as OTHERCONSTRAINT, FIELD_VERIFIED, DATE_RECOMMENDED, ROADWAYID, SECONDRDWY, LOCMP, LATY, LONX, LAT, LON, TRANSPORT_SYSTEM, FIELD_OBS,MISC_INFO " &
+                "From cfid_combined Where issueID in (" & Request.Form("issueIds").ToString() & ") "
             Dim dbcomm = New SqlCommand(sql, dbconn)
             Dim adp As New SqlDataAdapter(dbcomm)
             Dim dt As New DataTable
@@ -63,7 +61,7 @@ Partial Public Class ViewRecords
 
         'TODO: this is where we data-bind the user comments grid based on the issue ID
         Dim gv As GridView = e.Item.FindControl("UserCommentsGridView")
-        Dim adp As New SqlDataAdapter("select * from CFID_COMMENT where IssueID = @issueID order by CommentDate", dbconn)
+        Dim adp As New SqlDataAdapter("Select * from CFID_COMMENT where IssueID = @issueID order by CommentDate", dbconn)
         adp.SelectCommand.Parameters.AddWithValue("issueID", dr("IssueID"))
         Dim UserCommentsDataTable As New DataTable
         adp.Fill(UserCommentsDataTable)

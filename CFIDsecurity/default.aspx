@@ -131,43 +131,28 @@
         //map = the map itself
         //tableDialog = popup dialog for displaying tabular results
         //cfidPointLayer = dynamic CFID points layer shown in the map
-        //cfidLineLayer = dynamic CFID line layer shown in the map
         //infoTemplate = ESRI InfoTemplate object applied to displaying info window for identified features
         //identifyParams = ESRI IdentifyParams object used in the identify function
         //toolBar = ESRI drawing toolbar (not shown, but used for drawing features on map)
         //clickHandler = reference to dojo-connected map click handler, disconnected and reconnected depending on active tools--usually identify but can be the getlatlong tool
-        var map, tableDialog, cfidPointLayer, cfidLineLayer, infoTemplate, identifyParams, toolBar, clickHandler;
+        var map, tableDialog, cfidPointLayer, infoTemplate, identifyParams, toolBar, clickHandler;
 
 
         //Called after page load is complete to initialize map, dialogs, identify task, etc.
         function init() {
 
             //Initialize dynamic layers
-            // REAL SERVER FOR LIVE USE cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/0",
-            /*TODO: for editing, use*/ cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0",
-			//cfidPointLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
+            //TODO: for editing, use cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0",
+            //cfidPointLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
+            // REAL SERVER FOR LIVE USE 
+            cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/MapServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["IssueID","SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
-                    }
-                );
-
-            // REAL SERVER FOR LIVE USE cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer/1",
-            /*TODO: for editing, use*/ cfidLineLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/1",
-            //cfidLineLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/1",
-                    {
-                        mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "PRIORITY", "FREIGHT_NEED", "FIELD_VERIFIED"]
+                        outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "FIELD_VERIFIED"]
                     }
                 );
 
             cfidPointLayer.setDefinitionExpression("ARCHIVED = 0");
-            cfidLineLayer.setDefinitionExpression("ARCHIVED = 0");
-
-
-            //Set up symbology for dynamic CFID layers
-            var lineSymbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-                new dojo.Color([0, 190, 12]), 3);
 
             var borderSymbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
                 new dojo.Color([0, 190, 12]), 2);
@@ -178,7 +163,6 @@
                 new dojo.Color([0, 255, 12]));
 
             cfidPointLayer.setRenderer(new esri.renderer.SimpleRenderer(pointSymbol));
-            cfidLineLayer.setRenderer(new esri.renderer.SimpleRenderer(lineSymbol));
 
             //Initialize the map
             map = new esri.Map("mapDiv", {
@@ -231,13 +215,12 @@
 
             //Add layers to map
             map.addLayer(cfidPointLayer, 0);
-            map.addLayer(cfidLineLayer, 1);
             
             //Add onClick handler to do custom identify task
             clickHandler = dojo.connect(map, "onClick", identify);
 
             //create identify tasks and setup parameters
-            identifyTask = new esri.tasks.IdentifyTask("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid3/MapServer");
+            identifyTask = new esri.tasks.IdentifyTask("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/MapServer");
             identifyParams = new esri.tasks.IdentifyParameters();
             identifyParams.tolerance = 6;
             identifyParams.returnGeometry = false;
@@ -255,9 +238,7 @@
                 "<tr><th>State Road</th><td>${STATEROAD}</td></tr>" +
                 "<tr><th>Local Road</th><td>${LOCALROAD}</td></tr>" +
                 "<tr><th>Issue Location</th><td>${ISSUESITELOC}</td></tr>" +
-                "<tr><th>Freight Need</th><td>${FREIGHT_NEED}</td></tr>" +
                 "<tr><th>Issue Description</th><td>${ISSUE_DESCRIPTION}</td></tr>" +
-                "<tr><th>Priority</th><td>${PRIORITY}</td></tr>" +
                 "<tr><th>Implementation Ease</th><td>${EASE}</td></tr>" +
                 "<tr><th colspan='2' style='border-bottom: 1px solid'>Constraints</th></tr>" +
                 "<tr><th>ROW</th><td>${ROWCONSTRAINT}</td></tr>" +
@@ -265,21 +246,13 @@
                 "<tr><th>Light Pole</th><td>${LIGHTPOLECONSTRAINT}</td></tr>" +
                 "<tr><th>Signage</th><td>${SIGNAGECONSTRAINT}</td></tr>" +
                 "<tr><th>Structure</th><td>${STRUCTURECONSTRAINT}</td></tr>" +
-                "<tr><th>Other</th><td>${OTHERCONSTRAINT}</td></tr>" +
+                "<tr><th>Other</th><td>${OTHERCONSTAINT}</td></tr>" +
                 "<tr><th colspan='2' style='border-top: 1px solid'>&nbsp;</th></tr>" +
                 "<tr><th>Field Verified</th><td>${FIELD_VERIFIED}</td></tr>" +
                 "<tr><th>Date Recommended</th><td>${DATE_RECOMMENDED}</td></tr>" +
                 "<tr><th>Transport System</th><td>${TRANSPORT_SYSTEM}</td></tr>" +
-                "<tr><th>Freight System</th><td>${FREIGHT_SYSTEM}</td></tr>" +
                 "<tr><th colspan='2'>Field Observations</th></tr>" +
                 "<tr><td colspan='2'>${FIELD_OBS}</td></tr>" +
-                "<tr><th colspan='2'>Recommendation</th></tr>" +
-                "<tr><td colspan='2'>${RECOMMENDATION_DESC}</td></tr>" +
-                "<tr><th colspan='2'>Comments</th></tr>" +
-                "<tr><td colspan='2'>${COMMENTS}</td></tr>" +
-                "<tr><th>Improvement Stage</th><td>${IMPRVMNT_STAGE}</td></tr>" +
-                "<tr><th>Source</th><td>${SOURCE}</td></tr>" +
-                "<tr><th>Date Modified</th><td>${DATE_MODIFIED}</td></tr>" +
                 "</table>");
 
 
@@ -340,10 +313,6 @@
 
 
             //onUpdateEnd handlers re-enable filter checkboxes after layers are done refreshing
-            dojo.connect(cfidLineLayer, "onUpdateEnd", function (evt) {
-                jQuery("#filterOptions input[type=checkbox]").removeAttr("disabled");
-            });
-
             dojo.connect(cfidPointLayer, "onUpdateEnd", function (evt) {
                 jQuery("#filterOptions input[type=checkbox]").removeAttr("disabled");
             });
@@ -397,14 +366,14 @@
                 bInfo: "",
                 bPaginate: false,
                 fnRowCallback: function (nRow, aData, iDisplayIndex) {
-                    //add ZoomTo link, using objectID and feature type (data items 10 and 9)
-                    var zoomLink = "<a href='javascript:void(0);' onclick='zoomTo(" + aData[10] + ", \"" + aData[9] + "\");'>Zoom</a>";
+                    //add ZoomTo link, using objectID and feature type (data items 8 and 7)
+                    var zoomLink = "<a href='javascript:void(0);' onclick='zoomTo(" + aData[8] + ", \"" + aData[7] + "\");'>Zoom</a>";
                     //add more info and edit links, using issueID (data item 0)
-                    $('td:eq(6)', nRow).html(zoomLink);
+                    $('td:eq(4)', nRow).html(zoomLink);
                     var moreLink = "<a href='javascript:void(0);' onclick='openMoreInfo(" + aData[0] + ");'>More</a>";
-                    $('td:eq(7)', nRow).html(moreLink);
+                    $('td:eq(5)', nRow).html(moreLink);
                     var editLink = "<a href='javascript:void(0);' onclick='openRecord(" + aData[0] + ");'>Edit</a>";
-                    $('td:eq(8)', nRow).html(editLink);
+                    $('td:eq(6)', nRow).html(editLink);
 
                 }
             });
@@ -553,12 +522,6 @@
                                 County
                             </th>
                             <th>
-                                Priority
-                            </th>
-                            <th>
-                                Need
-                            </th>
-                            <th>
                                 Field Verified
                             </th>
                             <th>
@@ -586,13 +549,10 @@
                 <label for="COUNTY">County</label>
                 <select id="COUNTY" data-bind="options: $root.county, optionsCaption: '-Select a value-', value:COUNTY"></select>
 
-                <label for="SITE_LOCATION">Segment Location</label>
+                <label for="SITE_LOCATION">Site Location</label>
                 <input type="text" id="SITE_LOCATION" data-bind="value:SITE_LOCATION" title="Descriptive value representing exact location of improvement (US 19 and 54 Ave. North).<br/>Max Characters=100" /><br />
 
             </fieldset>
-            
-            <label for="FREIGHT_NEED">Freight Need</label>
-            <select id="FREIGHT_NEED" data-bind="options: $root.freightNeed, optionsCaption: '-Select a value-', value:FREIGHT_NEED"></select><br />
             
             <label for="ISSUE_DESCRIPTION">Issue Description</label>
             <select id="ISSUE_DESCRIPTION" data-bind="options: issueDescriptions, optionsCaption: '-Select a value-', value:ISSUE_DESCRIPTION"></select><br />
@@ -608,9 +568,6 @@
             <label for="YEAR">Year Recommended</label>
             <input type="text" id="YEAR" data-bind="value:YearRecommended" title="4-digit year when improvement recommended" /><br />
 
-            <label for="PRIORITY">Priority</label>
-            <select id="PRIORITY" data-bind="options: $root.priority, optionsCaption: '-Select a value-', value:PRIORITY"></select><br />
-            
             <label for="EASE">Implementation Ease</label>
             <select id="EASE" data-bind="options: $root.implementationEase, optionsCaption: '-Select a value-', value:EASE"></select><br />
             
@@ -635,15 +592,12 @@
                     <select id="StructureConstraint" data-bind="value: STRUCTURECONSTRAINT, options: $root.constraints, optionsCaption: '-Select a value-'"></select>
             
                     <label for="OtherConstraint">Other</label>
-                    <select id="OtherConstraint" data-bind="value: OTHERCONSTRAINT, options: $root.constraints, optionsCaption: '-Select a value-'"></select>
+                    <select id="OtherConstraint" data-bind="value: OTHERCONSTAINT, options: $root.constraints, optionsCaption: '-Select a value-'"></select>
                 </span>            
             </fieldset>
 
             <label for="TRANSPORT_SYSTEM">Transportation System</label>
-            <select id=TRANSPORT_SYSTEM" data-bind="options: $root.transportSystem, optionsCaption: '-Select a value-', value:TRANSPORT_SYSTEM"></select><br />
-
-            <label for="FREIGHT_SYSTEM">Freight System</label>
-            <select id="FREIGHT_SYSTEM" data-bind="options: $root.freightSystem, optionsCaption: '-Select a value-', value:FREIGHT_SYSTEM"></select><br />
+            <select id="TRANSPORT_SYSTEM" data-bind="options: $root.transportSystem, optionsCaption: '-Select a value-', value:TRANSPORT_SYSTEM"></select><br />
 
             <fieldset>
                 <legend>Issue Site Location</legend>
@@ -709,15 +663,8 @@
                 <label for="selectFromMapButton" class="jqb">Get From Map</label><input type="checkbox" id="selectFromMapButton" onclick="selectFromMap();" />
             </fieldset>
 
-            <label for="RECOMMENDATION_DESC">Recommendation Description</label>
-            <textarea rows="5" cols="80" id="RECOMMENDATION_DESC" data-bind="value:RECOMMENDATION_DESC" title="Details regarding the description of the recommended improvement Add recommendation from source"></textarea><br />
-
             <label for="FIELD_OBS">Field Notes</label>
             <textarea rows="5" cols="80" id="FIELD_OBS" data-bind="value:FIELD_OBS" title="Field Observations noted from the source records."></textarea><br />
-
-
-            <label for="COMMENTS">Comments</label>
-            <textarea rows="5" cols="80" id="COMMENTS" data-bind="value:COMMENTS" title="Comments about the Specific Location or Corridor."></textarea><br />
 
     </div>
     <form target="_blank" id="ViewRecordsForm" action="ViewRecords.aspx" method="post">

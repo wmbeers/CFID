@@ -46,27 +46,11 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="29%">
-                                                                    <strong>Issue Extent : </strong>
-                                                                </td>
-                                                                <td width="71%">
-                                                                    <%#Container.DataItem("ISSUE_EXTENT")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td>
                                                                     <strong>FDOT District : </strong>
                                                                 </td>
                                                                 <td>
                                                                     <%#Container.DataItem("FDOT_District")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="44%">
-                                                                    <strong>Source :</strong>
-                                                                </td>
-                                                                <td width="56%">
-                                                                    <%#Container.DataItem("SOURCE")%>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -81,14 +65,6 @@
                                                     </td>
                                                     <td width="50%" class="Pad">
                                                         <table width="100%" border="0" cellspacing="1" cellpadding="0" class="Light11">
-                                                            <tr>
-                                                                <td>
-                                                                    <strong>Freight Need : </strong>
-                                                                </td>
-                                                                <td>
-                                                                    <%#Container.DataItem("FREIGHT_NEED")%>
-                                                                </td>
-                                                            </tr>
                                                             <tr>
                                                                 <td width="40%">
                                                                     <strong>Issue Description : </strong>
@@ -140,30 +116,6 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="35%">
-                                                                    <strong>Corridor Name : </strong>
-                                                                </td>
-                                                                <td width="65%">
-                                                                    <%#Container.DataItem("CORRIDOR")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <strong>Segment From : </strong>
-                                                                </td>
-                                                                <td>
-                                                                    <%#Container.DataItem("SEGMENT_FROM")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <strong>Segment To : </strong>
-                                                                </td>
-                                                                <td>
-                                                                    <%#Container.DataItem("SEGMENT_TO")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td>
                                                                     <strong>Primary RoadwayID : </strong>
                                                                 </td>
@@ -176,23 +128,7 @@
                                                                     <strong>Secondary RoadwayID : </strong>
                                                                 </td>
                                                                 <td>
-                                                                    <%#Container.DataItem("SECONDRDWYID")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="40%">
-                                                                    <strong>Begin MP :</strong>
-                                                                </td>
-                                                                <td width="60%">
-                                                                    <%#Container.DataItem("BEGMP")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <strong>Ending MP : </strong>
-                                                                </td>
-                                                                <td>
-                                                                    <%#Container.DataItem("ENDMP")%>
+                                                                    <%#Container.DataItem("SECONDRDWY")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -205,14 +141,6 @@
                                                                 </td>
                                                                 <td>
                                                                     <%#Container.DataItem("TRANSPORT_SYSTEM")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="40%">
-                                                                    <strong>Freight System : </strong>
-                                                                </td>
-                                                                <td width="60%">
-                                                                    <%#Container.DataItem("FREIGHT_SYSTEM")%>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -237,14 +165,6 @@
                                                                 </td>
                                                                 <td>
                                                                     <%#Container.DataItem("LOCMP")%>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <strong>Corridor Segment : </strong>
-                                                                </td>
-                                                                <td>
-                                                                    <%#Container.DataItem("Corridor_Segment")%>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -296,22 +216,6 @@
                                                     <br />
                                                     <%#Container.DataItem("FIELD_OBS")%>
                                                     <br />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Recommendation: </strong>
-                                                </td>
-                                                <td>
-                                                    <%#Container.DataItem("RECOMMENDATION_DESC")%>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Comments : </strong>
-                                                </td>
-                                                <td>
-                                                    <%#Container.DataItem("COMMENTS")%>
                                                 </td>
                                             </tr>
                                         </table>

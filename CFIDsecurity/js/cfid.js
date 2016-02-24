@@ -346,88 +346,22 @@ function openMoreInfo(issueID) {
 // Set up map layers for editing
 function initEditing(evt) {
 
-    var editLineLayer = map.getLayer(cfidLineLayer.id);
     var editPointLayer = map.getLayer(cfidPointLayer.id);
 
-    var editLineToolbar = new esri.toolbars.Edit(map);
     var editPointToolbar = new esri.toolbars.Edit(map);
 
     var editingEnabled = false;
     var originalEvent = evt;
 
-    // Toggle editing when a line is double-clicked
+    // Toggle editing when a feature is double-clicked
     jQuery("#editMapBtn").on("click", function (evt) {
         // Cancel all events. Prevents map from zooming.
         evt.preventDefault();
         evt.stopPropagation();
         if (editingEnabled === false) {
             editingEnabled = true;
+            editPointToolbar.activate(esri.toolbars.Edit.MOVE, originalEvent.graphic);
 
-            if (originalEvent.graphic.geometry.type == "polyline") {
-                editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, originalEvent.graphic);
-            }
-
-            else if (originalEvent.graphic.geometry.type == "point") {
-                editPointToolbar.activate(esri.toolbars.Edit.MOVE, originalEvent.graphic);
-            }
-
-        } else {
-            if (editLineToolbar.getCurrentState().isModified) {
-                // Keep changes to the line
-                editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null);
-                //TODO: Add the long/lang of the first and last points to the location data for this line
-            }
-            if (editPointToolbar.getCurrentState().isModified) {
-                // Keep change to the point and store new location in database
-                editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
-                updatePointLocation(editPointToolbar.getCurrentState().graphic);
-            }
-            editLineToolbar.deactivate();
-            editPointToolbar.deactivate();
-            editingEnabled = false;
-        }
-    });
-}
-function initEditingOld(evt) {
-
-    var editLineLayer = map.getLayer(cfidLineLayer.id);
-    var editPointLayer = map.getLayer(cfidPointLayer.id);
-
-    var editLineToolbar = new esri.toolbars.Edit(map);
-    var editPointToolbar = new esri.toolbars.Edit(map);
-
-    var editingEnabled = false;
-
-
-
-    // Toggle editing when a line is double-clicked
-    editLineLayer.on("dbl-click", function (evt) {
-        // Cancel all events. Prevents map from zooming.
-        evt.preventDefault();
-        evt.stopPropagation();
-        if (editingEnabled === false) {
-            editingEnabled = true;
-            editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, evt.graphic);
-
-        } else {
-            if (editLineToolbar.getCurrentState().isModified) {
-                // Keep changes to the line
-                editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null);
-                //TODO: Add the long/lang of the first and last points to the location data for this line
-            }
-            editLineToolbar.deactivate();
-            editingEnabled = false;
-        }
-    });
-
-    // Toggle editing when a point is double-clicked
-    editPointLayer.on("dbl-click", function (evt) {
-        // Cancel all events. Prevents map from zooming.
-        evt.preventDefault();
-        evt.stopPropagation();
-        if (editingEnabled === false) {
-            editingEnabled = true;
-            editPointToolbar.activate(esri.toolbars.Edit.MOVE, evt.graphic);
         } else {
             if (editPointToolbar.getCurrentState().isModified) {
                 // Keep change to the point and store new location in database
@@ -439,6 +373,57 @@ function initEditingOld(evt) {
         }
     });
 }
+//function initEditingOld(evt) {
+
+//    var editLineLayer = map.getLayer(cfidLineLayer.id);
+//    var editPointLayer = map.getLayer(cfidPointLayer.id);
+
+//    var editLineToolbar = new esri.toolbars.Edit(map);
+//    var editPointToolbar = new esri.toolbars.Edit(map);
+
+//    var editingEnabled = false;
+
+
+
+//    // Toggle editing when a line is double-clicked
+//    editLineLayer.on("dbl-click", function (evt) {
+//        // Cancel all events. Prevents map from zooming.
+//        evt.preventDefault();
+//        evt.stopPropagation();
+//        if (editingEnabled === false) {
+//            editingEnabled = true;
+//            editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, evt.graphic);
+
+//        } else {
+//            if (editLineToolbar.getCurrentState().isModified) {
+//                // Keep changes to the line
+//                editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null);
+//                //TODO: Add the long/lang of the first and last points to the location data for this line
+//            }
+//            editLineToolbar.deactivate();
+//            editingEnabled = false;
+//        }
+//    });
+
+//    // Toggle editing when a point is double-clicked
+//    editPointLayer.on("dbl-click", function (evt) {
+//        // Cancel all events. Prevents map from zooming.
+//        evt.preventDefault();
+//        evt.stopPropagation();
+//        if (editingEnabled === false) {
+//            editingEnabled = true;
+//            editPointToolbar.activate(esri.toolbars.Edit.MOVE, evt.graphic);
+//        } else {
+//            if (editPointToolbar.getCurrentState().isModified) {
+//                // Keep change to the point and store new location in database
+//                editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
+//                updatePointLocation(editPointToolbar.getCurrentState().graphic);
+//            }
+//            editPointToolbar.deactivate();
+//            editingEnabled = false;
+//        }
+//    });
+//}
 /* TESTING ALLOWING EDITING END */
 
 function openReport() {
@@ -456,7 +441,6 @@ function identify(evt) {
     identifyParams.mapExtent = map.extent;
     identifyParams.layerDefinitions = [];
     identifyParams.layerDefinitions[0] = cfidPointLayer.getDefinitionExpression();
-    identifyParams.layerDefinitions[2] = cfidLineLayer.getDefinitionExpression();
 
     var deferred = identifyTask.execute(identifyParams);
 
@@ -531,7 +515,6 @@ function updateFilter() {
     //features that match
     //console.log("*************setting layer definitionExpression to " + definitionExpression);
     cfidPointLayer.setDefinitionExpression(definitionExpression);
-    cfidLineLayer.setDefinitionExpression(definitionExpression);
 
     //store query for later user
     jQuery("#tableDiv").data("definitionExpression", definitionExpression);
@@ -567,21 +550,15 @@ function refreshObjectIds() {
 
     //console.log(query.where);
 
-    //execute queries and store results
-    //the point layer is queried first, then in the callback function the line layer is queried
-    //this keeps things tidily ordered. Only after the line layer query is done do we refresh the table
+    //execute query and store results
     cfidPointLayer.queryIds(query, function (objectIds) {
         jQuery("#tableDiv").data("pointObjectIds", objectIds);
-        cfidLineLayer.queryIds(query, function (objectIds) {
-            jQuery("#tableDiv").data("lineObjectIds", objectIds);
-            refreshTable();
-        });
+        refreshTable();
     });
 }
 
 function refreshTable() {
     var pointIds = jQuery("#tableDiv").data("pointObjectIds");
-    var lineIds = jQuery("#tableDiv").data("lineObjectIds");
     
     //bail if the dialog isn't open
     if (jQuery("#tableDiv").dialog("isOpen") == false) {
@@ -598,21 +575,7 @@ function refreshTable() {
     //if both not null, query both
     //if both null, do nothing
     var hasPoints = (pointIds != null && pointIds.length > 0);
-    var hasLines = (lineIds != null && lineIds.length > 0);
-    if (hasPoints && hasLines) {
-        //initiate the query for all records
-        var query = new esri.tasks.Query();
-        query.returnGeometry = false;
-        query.objectIds = pointIds;
-        cfidPointLayer.queryFeatures(query, function (featureSet) {
-            addRecords(featureSet, "p");
-            query.objectIds = lineIds;
-            cfidLineLayer.queryFeatures(query, function (featureSet2) {
-                addRecords(featureSet2, "l");
-                esri.hide(dojo.byId("status"));
-            });
-        });
-    } else if (hasPoints) {
+    if (hasPoints) {
         //query points only
         //initiate the query for all records
         var query = new esri.tasks.Query();
@@ -620,15 +583,6 @@ function refreshTable() {
         query.objectIds = pointIds;
         cfidPointLayer.queryFeatures(query, function (featureSet) {
             addRecords(featureSet, "p");
-        });
-    } else if (hasLines) {
-        //query lines only
-        var query = new esri.tasks.Query();
-        query.returnGeometry = false;
-        query.objectIds = lineIds;
-        cfidLineLayer.queryFeatures(query, function (featureSet2) {
-            addRecords(featureSet2, "l");
-            esri.hide(dojo.byId("status"));
         });
     } else {
         //do nothing
@@ -646,9 +600,8 @@ function addRecords(featureSet, featureClassCode) {
     for (var i = 0; i < featureSet.features.length; i++) {
         var a = featureSet.features[i].attributes;
         data.push([
-             a.IssueID, a.SITE_LOCATION, a.COUNTY, a.PRIORITY, a.FREIGHT_NEED,
-             a.FIELD_VERIFIED == 0 ? "Yes" : "No",
-             "Zoom", "More", "Edit", featureClassCode, a.OBJECTID]);
+             a.IssueID, a.SITE_LOCATION, a.COUNTY, a.FIELD_VERIFIED,
+			 "Zoom", "More", "Edit", featureClassCode, a.OBJECTID]);
         jQuery("#tableDiv").data("issueIds").push(a.IssueID); //stores list of all issue IDs shown in table, so it can be passed to a full report
     }
     jQuery("#attributeTable").dataTable().fnAddData(data);
@@ -657,7 +610,6 @@ function addRecords(featureSet, featureClassCode) {
 
 function zoomTo(oid, featureClassCode) {
     var featureClass = cfidPointLayer;
-    if (featureClassCode == "l") featureClass = cfidLineLayer;
 
     //initiate the query for the record
     var query = new esri.tasks.Query();
