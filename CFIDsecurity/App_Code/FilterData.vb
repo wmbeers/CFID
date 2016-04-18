@@ -42,7 +42,7 @@ Public Class FilterData
         'reply.Add(New Filter("Extent", "ISSUE_EXTENT"))
 
         'reply.Add(New Filter("Priority", "PRIORITY"))
-        reply.Add(New Filter("Implementation Ease", "EASE"))
+        reply.Add(New Filter("Implementation Ease (Estimated)", "EASE"))
         'reply.Add(New Filter("Freight Need", "Freight_Need"))
         reply.Add(New Filter("Issue Description", "ISSUE_DESCRIPTION"))
         'SPECIAL CASE reply.Add(New Filter("Constraints", ""))

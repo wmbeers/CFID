@@ -178,7 +178,7 @@
             dojo.create("a", {
                 "class": "action",
                 "innerHTML": "More Info",
-                "onClick": "openMoreInfo()",
+                "onClick": "openMoreInfo(event)",
                 "href": "javascript:void(0)"
             }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
 

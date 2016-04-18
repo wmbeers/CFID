@@ -181,7 +181,7 @@
                                     </tr>
                                     <tr>
                                         <td align="center" valign="middle" class="Pad BdrRight BdrBot3 BgGray Light11 Gray">
-                                            <strong>Constraints</strong>
+                                            <strong>Constraints (Estimated)</strong>
                                         </td>
                                     </tr>
                                     <tr>
@@ -258,30 +258,7 @@
                                         </td>
                                     </tr>--%>
                     </table> </div> </td> </tr>
-                    <br />
-                    <tr>
-                        <td align="center" valign="middle" class="Pad BdrRight BdrBot3 BgGray Light12 Gray">
-                            <strong>Project Dialog</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="20" class="Bdr1">
-                            <asp:GridView ID="UserCommentsGridView" runat="server" AutoGenerateColumns="False" 
-                                AllowSorting="false" HorizontalAlign="Center" EmptyDataText="There are no user comments associated with this record"
-                                EmptyDataRowStyle-CssClass="Light11"
-                                Width="675px" CellPadding="4" ForeColor="#333333" GridLines="None">
-                                <HeaderStyle CssClass="BgGray Light12" HorizontalAlign="Left" />
-                                <RowStyle BackColor="#F7F6F3" ForeColor="#333333" CssClass="Light11" HorizontalAlign="Left" />
-                                <AlternatingRowStyle BackColor="White" ForeColor="#284775" CssClass="Light11" HorizontalAlign="Left" />
-                                <Columns>
-                                    <asp:BoundField DataField="COMMENT" HeaderText="Comment" />
-                                    <asp:BoundField DataField="USERNAME" HeaderText="User" HeaderStyle-Width="6em" />
-                                    <asp:BoundField DataField="CommentDate" HeaderText="Date" HeaderStyle-Width="5em" DataFormatString="{0:d}" />
-                                </Columns>
-                                
-                            </asp:GridView>
-                        </td>
-                    </tr>
+                    
                 </table>
 
             </ItemTemplate>
