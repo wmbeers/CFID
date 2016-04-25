@@ -1,11 +1,11 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" CodeFile="Default.aspx.vb" Inherits="mapViewer_Default" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>CFID Map Viewer</title>
-    <link rel="stylesheet" href="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
-    <link rel="stylesheet" href="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/3.16/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.css" />
     <link rel="Stylesheet" href="css/jquery.dataTables.css" />
     <style type="text/css">
@@ -110,12 +110,14 @@
     <script src="Scripts/knockout.validation.debug.js" type="text/javascript"></script>
     <script src="Scripts/knockout-jQueryUI-Bindings.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/cfid.js"></script>
-    <script type="text/javascript" src="https://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+    <script type="text/javascript" src="https://js.arcgis.com/3.16"></script>
     <script type="text/javascript">
         
         dojo.require("esri.map");
         dojo.require("esri.layers.FeatureLayer");
         dojo.require("esri.tasks.query");
+        dojo.require("esri.tasks.IdentifyTask");
+        dojo.require("esri.tasks.IdentifyParameters");
         dojo.require("esri.toolbars.draw");
         dojo.require("esri.toolbars.edit");
         dojo.require("esri.geometry.Geometry");
@@ -559,8 +561,6 @@
             
             <label for="SOURCE">Collection Source</label>
             <select id="SOURCE" data-bind="options: $root.source, optionsCaption: '-Select a value-', value:SOURCE" ></select><br />
-            
-            <!--TODO: County--auto-populate based on location?-->
             
             <input type="checkbox" id="FIELD_VERIFIED" data-bind="checked: FieldVerified" />
             <label for="FIELD_VERIFIED" class="noBlock">Field Verified</label><br />
