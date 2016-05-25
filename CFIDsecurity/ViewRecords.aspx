@@ -83,7 +83,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <strong>Year Recommended : </strong>
+                                                                    <strong>Year Identified : </strong>
                                                                 </td>
                                                                 <td>
                                                                     <%#Container.DataItem("DATE_RECOMMENDED")%>
@@ -128,7 +128,7 @@
                                                                     <strong>Secondary RoadwayID : </strong>
                                                                 </td>
                                                                 <td>
-                                                                    <%#Container.DataItem("SECONDRDWY")%>
+                                                                    <%#Container.DataItem("SECONDRDWYID")%>
                                                                 </td>
                                                             </tr>
                                                         </table>

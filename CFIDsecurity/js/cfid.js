@@ -363,10 +363,11 @@ function initEditing(evt) {
             editPointToolbar.activate(esri.toolbars.Edit.MOVE, originalEvent.graphic);
 
         } else {
-            if (editPointToolbar.getCurrentState().isModified) {
+        	if (editPointToolbar.getCurrentState().isModified) {
+        		debugger;
                 // Keep change to the point and store new location in database
                 editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
-                updatePointLocation(editPointToolbar.getCurrentState().graphic);
+                //TODO: update the point's lat/long updatePointLocation(editPointToolbar.getCurrentState().graphic);
             }
             editPointToolbar.deactivate();
             editingEnabled = false;

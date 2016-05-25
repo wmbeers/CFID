@@ -147,7 +147,7 @@
             //TODO: for editing, use cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0",
             //cfidPointLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
             // REAL SERVER FOR LIVE USE 
-            cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/MapServer/0",
+            cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/FeatureServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "FIELD_VERIFIED"]
@@ -194,13 +194,18 @@
                 }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
 
                 //Add link to edit map
-                dojo.create("a", {
+                //TODO: this is disabled because we need to rethink the way it works
+                //having the editMapBtn behave as a toggle in the map popup presents a problem
+                //in that you can't move the point to a location under the map without dismissing it
+                //and if you dismiss it then you can't click the button again to hide it.
+                //Also, it's not exactly clear to the user that clicking Edit Map is what you do to save it.
+                /*dojo.create("a", {
                     "class": "action",
                     "id" : "editMapBtn",
                     "innerHTML": "Edit Map",
                     "onClick": "initEditing(event)",
                     "href": "javascript:void(0)"
-                }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
+                }, dojo.query(".actionList", map.infoWindow.domNode)[0]);*/
             }
 
             //Hides the loading message and calls function to update the list of object IDs matching current filter options within the current map extent
@@ -248,10 +253,10 @@
                 "<tr><th>Light Pole</th><td>${LIGHTPOLECONSTRAINT}</td></tr>" +
                 "<tr><th>Signage</th><td>${SIGNAGECONSTRAINT}</td></tr>" +
                 "<tr><th>Structure</th><td>${STRUCTURECONSTRAINT}</td></tr>" +
-                "<tr><th>Other</th><td>${OTHERCONSTAINT}</td></tr>" +
+                "<tr><th>Other</th><td>${OTHERCONSTRAINT}</td></tr>" +
                 "<tr><th colspan='2' style='border-top: 1px solid'>&nbsp;</th></tr>" +
                 "<tr><th>Field Verified</th><td>${FIELD_VERIFIED}</td></tr>" +
-                "<tr><th>Date Recommended</th><td>${DATE_RECOMMENDED}</td></tr>" +
+                "<tr><th>Date Identified</th><td>${DATE_RECOMMENDED}</td></tr>" +
                 "<tr><th>Transport System</th><td>${TRANSPORT_SYSTEM}</td></tr>" +
                 "<tr><th colspan='2'>Field Observations</th></tr>" +
                 "<tr><td colspan='2'>${FIELD_OBS}</td></tr>" +
@@ -265,7 +270,7 @@
             });
 
             // map.on wasn't working for adding this to the map itself so letting a button call this function for now.
-            jQuery("#testing").on("click", function (event) {initEditing(event);});
+            //TODO: enable this jQuery("#testing").on("click", function (event) {initEditing(event);});
 
             //initialize filters
             //this is done client-side rather than with asp.net controls because we need the values of the checkboxes locally
@@ -445,11 +450,11 @@
                
                 <br />
 
-                <!-- TEST -->
+                <!-- TEST 
                 <br />
                 <button id="testing" title="Edit Map">Edit Map</button>
                 <br />
-                <!-- TEST -->
+                 TEST -->
 
                 <% If CanEdit And False Then 'TODO: enable adding later %>
                 <button data-bind="click: addRecord" title="Click to add a new record">
@@ -461,14 +466,15 @@
                     <asp:LoginView ID="LoginView1" runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
                             <ul>
-                                <%--<a id="registerLink" runat="server" style="color: blue; font-size: medium; font-weight: 700;"
-                                    visible="false" href="~/Account/Register.aspx">Register</a>--%>
-                                    <a id="A2" runat="server" style="color: blue; font-family: Arial, Helvetica, sans-serif; font-size: medium; font-size: 8pt;"
-                                    href="~/help/help.htm">Help</a>
-                                |
-                                <a id="loginLink" runat="server" style="color: blue; font-family: Arial, Helvetica, sans-serif; font-size: medium; font-size: 8pt;"
-                                    href="~/Account/Login.aspx">Log in</a>
-                          
+                                <li>
+                                    <%--<a id="registerLink" runat="server" style="color: blue; font-size: medium; font-weight: 700;"
+                                        visible="false" href="~/Account/Register.aspx">Register</a>--%>
+                                        <a id="A2" runat="server" style="color: blue; font-family: Arial, Helvetica, sans-serif; font-size: medium; font-size: 8pt;"
+                                        href="~/help/help.htm">Help</a>
+                                    |
+                                    <a id="loginLink" runat="server" style="color: blue; font-family: Arial, Helvetica, sans-serif; font-size: medium; font-size: 8pt;"
+                                        href="~/Account/Login.aspx">Log in</a>
+                                </li>
                             </ul>
                         </AnonymousTemplate>
                         <LoggedInTemplate>
@@ -592,7 +598,7 @@
                     <select id="StructureConstraint" data-bind="value: STRUCTURECONSTRAINT, options: $root.constraints, optionsCaption: '-Select a value-'"></select>
             
                     <label for="OtherConstraint">Other</label>
-                    <select id="OtherConstraint" data-bind="value: OTHERCONSTAINT, options: $root.constraints, optionsCaption: '-Select a value-'"></select>
+                    <select id="OtherConstraint" data-bind="value: OTHERCONSTRAINT, options: $root.constraints, optionsCaption: '-Select a value-'"></select>
                 </span>            
             </fieldset>
 
