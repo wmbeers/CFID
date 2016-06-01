@@ -127,7 +127,6 @@
         dojo.require("dojo.on");
         dojo.require("dojo.dom");
 
-        var canEdit = <% =CanEdit.ToString().ToLower() %>;
 
         //initialize global variables that will be referenced in various functions
         //map = the map itself
@@ -137,20 +136,20 @@
         //identifyParams = ESRI IdentifyParams object used in the identify function
         //toolBar = ESRI drawing toolbar (not shown, but used for drawing features on map)
         //clickHandler = reference to dojo-connected map click handler, disconnected and reconnected depending on active tools--usually identify but can be the getlatlong tool
-        var map, tableDialog, cfidPointLayer, infoTemplate, identifyParams, toolBar, clickHandler;
+        //editPointToolbar = reference to the edit toolbar (not really a "tool bar" shown on screen, but handles editing points)
+        //movingPoint = boolean flag set when actively moving a point, allows for programmatic hiding of infoWindow while dragging
+        //canEdit = boolean flag set during page load, based on user's login role
+        var map, tableDialog, cfidPointLayer, infoTemplate, identifyParams, toolBar, clickHandler, editPointToolbar, movingPoint = false, canEdit = <% =CanEdit.ToString().ToLower() %>;
 
 
         //Called after page load is complete to initialize map, dialogs, identify task, etc.
         function init() {
 
-            //Initialize dynamic layers
-            //TODO: for editing, use cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid_provisional/FeatureServer/0",
-            //cfidPointLayer = new esri.layers.FeatureLayer("https://207.150.177.36:6080/arcgis/rest/services/cfidmaster/MapServer/0",
-            // REAL SERVER FOR LIVE USE 
+            //Initialize CFID layer
             cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/FeatureServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "FIELD_VERIFIED"]
+                        outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "FIELD_VERIFIED", "Ydd", "Xdd", "LATY", "LONX", "LAT", "LON"] //TODO: drop LATY, LONX, LAT and LON
                     }
                 );
 
@@ -194,18 +193,13 @@
                 }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
 
                 //Add link to edit map
-                //TODO: this is disabled because we need to rethink the way it works
-                //having the editMapBtn behave as a toggle in the map popup presents a problem
-                //in that you can't move the point to a location under the map without dismissing it
-                //and if you dismiss it then you can't click the button again to hide it.
-                //Also, it's not exactly clear to the user that clicking Edit Map is what you do to save it.
-                /*dojo.create("a", {
+                dojo.create("a", {
                     "class": "action",
                     "id" : "editMapBtn",
-                    "innerHTML": "Edit Map",
-                    "onClick": "initEditing(event)",
+                    "innerHTML": "Edit Point",
+                    //NO, initEditing is called elsewhere, and the click event assigned in initEditing. Assiging it here is all wrong"onClick": "initEditing(event)",
                     "href": "javascript:void(0)"
-                }, dojo.query(".actionList", map.infoWindow.domNode)[0]);*/
+                }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
             }
 
             //Hides the loading message and calls function to update the list of object IDs matching current filter options within the current map extent
@@ -235,6 +229,35 @@
             identifyParams.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
             identifyParams.width = map.width;
             identifyParams.height = map.height;
+
+            //set up editing
+            editPointToolbar = new esri.toolbars.Edit(map);
+            map.infoWindow.on("hide", function() {
+                //todo: prompt to save changes if there are any? There isn't a way to prevent hiding the window, so there wouldn't be a way to cancel it.
+                if (!movingPoint) {
+                    jQuery("#editMapBtn").text("Edit Point");
+                    //restore original location
+                    //(note, if user is just dismissing a "no info found" popup shown after clicking the map but not a point on the map, graphic will be null
+                    if (editPointToolbar.getCurrentState().graphic) {
+                        editPointToolbar.getCurrentState().graphic.geometry = editPointToolbar.getCurrentState().graphic.originalPoint;
+                        cfidPointLayer.refresh();
+                    }
+                    editPointToolbar.deactivate();
+                }
+            });
+
+            //hide the infowindow while moving
+            editPointToolbar.on("graphic-move-start", function() {
+                movingPoint = true; // prevents the next line from turning off editing in the hide event handler
+                map.infoWindow.hide(); 
+            });
+
+            editPointToolbar.on("graphic-move-stop", function(e) {
+                movingPoint = false; // restores the hide event handler functions ability to cancel editing
+                map.infoWindow.hide(); 
+                map.infoWindow.show(e.graphic.geometry);
+            });
+
 
             //create the Info Window template, applied to features identified in the identify function
             infoTemplate = new esri.InfoTemplate("Issue #: ${IssueID}",
@@ -269,9 +292,6 @@
                 updateFilter();
             });
 
-            // map.on wasn't working for adding this to the map itself so letting a button call this function for now.
-            //TODO: enable this jQuery("#testing").on("click", function (event) {initEditing(event);});
-
             //initialize filters
             //this is done client-side rather than with asp.net controls because we need the values of the checkboxes locally
             //and asp.net checkboxlist controls hide the values in viewstate
@@ -288,11 +308,9 @@
                 "contentType": "application/json; charset=utf-8",
                 "dataType": "json",
                 "success": function (data) {
-                    //console.log("Adding filter values");
                     //iterate through each filter object
                     for (var f = 0; f < data.d.length; f++) {
                         var filterObject = data.d[f];
-                        //console.log(filterObject.Label);
 
                         //append header with "friendly" name
                         jQuery("#filterOptions").append("<h3>" + filterObject.Label + "</h3>");
@@ -385,7 +403,6 @@
                 }
             });
 
-            //console.log("***********" + jQuery("#selectFromMapButton").length);
             jQuery("#selectFromMapButton").button();
 
             jQuery("button, #selectFromMapButton, #drawAreaButton").button();
@@ -393,37 +410,11 @@
 
             jQuery("#spatialFilterOption").buttonset();
 
-
-
-            //openRecord(1450);
         } // end init
 
 
         //call init function when page is fully loaded and dojo initialized
         dojo.ready(init);
-
-
-
-
-        $(document).ready(function () {
-            /*$('.popup-with-form').magnificPopup({
-                type: 'inline',
-                preloader: false,
-                focus: '#name',
-
-                // When elemened is focused, some mobile browsers in some cases zoom in
-                // It looks not nice, so we disable it:
-                callbacks: {
-                    beforeOpen: function () {
-                        if ($(window).width() < 700) {
-                            this.st.focus = false;
-                        } else {
-                            this.st.focus = '#name';
-                        }
-                    }
-                }
-            });*/
-        });
 
         function toggleBasemap(basemap) {
             map.setBasemap(basemap);
@@ -450,11 +441,6 @@
                
                 <br />
 
-                <!-- TEST 
-                <br />
-                <button id="testing" title="Edit Map">Edit Map</button>
-                <br />
-                 TEST -->
 
                 <% If CanEdit And False Then 'TODO: enable adding later %>
                 <button data-bind="click: addRecord" title="Click to add a new record">

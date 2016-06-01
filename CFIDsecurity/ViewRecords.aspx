@@ -148,7 +148,7 @@
                                                                     <strong>Latitude : </strong>
                                                                 </td>
                                                                 <td>
-                                                                    <%#Container.DataItem("LATY")%>
+                                                                    <%#Container.DataItem("Ydd")%>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -156,7 +156,7 @@
                                                                     <strong>Longitude : </strong>
                                                                 </td>
                                                                 <td>
-                                                                    <%#Container.DataItem("LONX")%>
+                                                                    <%#Container.DataItem("Xdd")%>
                                                                 </td>
                                                             </tr>
                                                             <tr>

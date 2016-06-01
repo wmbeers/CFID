@@ -131,7 +131,6 @@ function CFIDRecord(m) {
         { required:
             { "message": "Begin Milepost is required for Corridors",
                 "onlyIf": function () {
-                    //console.log("BegMP required: " + self.ISSUE_EXTENT() == "Corridor");
                     return self.ISSUE_EXTENT() == "Corridor";
                 }
             }, number: true
@@ -139,7 +138,6 @@ function CFIDRecord(m) {
         this.ENDMP = ko.validatedObservable(m.ENDMP).extend({ required:
             { "message": "End Milepost is required for Corridors",
                 "onlyIf": function () {
-                    //console.log("EndMP required: " + self.ISSUE_EXTENT() == "Corridor");
                     return self.ISSUE_EXTENT() == "Corridor";
                 }
             }, number: true
@@ -184,12 +182,10 @@ function CFIDRecord(m) {
         return self.ISSUE_EXTENT() == "Corridor";
     });
 
-    //TODO: this needs to be replaced by method that writes directly to feature classes
     this.commitChanges = function () {
         if (self.canSave()) {
 
             var data = "{'cfidRecord':" + ko.toJSON(RootViewModel.cfidRecord()) + "}";
-            //console.log(data);
 
             jQuery.ajax({
                 "type": "POST",
@@ -224,13 +220,12 @@ function CFIDRecord(m) {
             if (self.hasOwnProperty(property) && property != "canSave") {
                 if (self[property].hasOwnProperty("isValid")) {
                     if (!self[property].isValid()) {
-                        //console.log("cannot save because " + property + " is invalid");
                         return false;
                     }
                 }
             }
         }
-        //console.log("can save");
+
         return true;
     });
 
@@ -255,14 +250,6 @@ function CFIDRecord(m) {
         return o;
     });
 
-
-//    this.canSaveSubscription = this.canSave.subscribe(function (newValue) {
-//        console.log("canSaveSubscription " + newValue);
-//        jQuery("#editDialog").dialog("option", "buttons", [
-//            { text: "Save", click: self.commitChanges, disabled: !newValue },
-//            { text: "Cancel", click: self.cancelChanges }
-//        ]);
-//    });
 }
 
 
@@ -342,90 +329,54 @@ function openMoreInfo(issueID) {
     jQuery("#ViewRecordsForm").submit();
 }
 
-/* TESTING ALLOWING EDITING */
-// Set up map layers for editing
+// Called when infoWindow is shown after clicking on a map point, sets up the point for editing
 function initEditing(evt) {
+    if (!canEdit) return;
 
-    var editPointLayer = map.getLayer(cfidPointLayer.id);
+	//tracks whether user has clicked the "Edit Point" button in the infoWindow popup
+    var editingEnabled = false; 
 
-    var editPointToolbar = new esri.toolbars.Edit(map);
+	//the graphic being edited
+    var graphic = evt.graphic; 
 
-    var editingEnabled = false;
-    var originalEvent = evt;
+    //graphic will be null if user hasn't clicked on a map point
+    if (!graphic) return;
 
-    // Toggle editing when a feature is double-clicked
-    jQuery("#editMapBtn").on("click", function (evt) {
-        // Cancel all events. Prevents map from zooming.
-        evt.preventDefault();
-        evt.stopPropagation();
+	//extend the graphic to save it's original point, used when closing w/o saving (graphic.geometry = graphic.originalPoint is called)
+    graphic.originalPoint = graphic.geometry; 
+
+	//reference to the Edit Point/Save Point button
+    var btn = jQuery("#editMapBtn");
+
+	//reset the button's click handler to work with the graphic being edited
+    btn.off("click");
+    btn.on("click", function (evt) {
         if (editingEnabled === false) {
             editingEnabled = true;
-            editPointToolbar.activate(esri.toolbars.Edit.MOVE, originalEvent.graphic);
-
+            editPointToolbar.activate(esri.toolbars.Edit.MOVE, graphic);
+            btn.text("Save Point");
         } else {
         	if (editPointToolbar.getCurrentState().isModified) {
-        		debugger;
-                // Keep change to the point and store new location in database
-                editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
-                //TODO: update the point's lat/long updatePointLocation(editPointToolbar.getCurrentState().graphic);
-            }
+        		// Keep change to the point and store new location in database
+        		var g = editPointToolbar.getCurrentState().graphic; //todo: or could I just reference "graphic"? Seems like I should be able to do that.
+
+        		//update lat/long
+        		var mp = esri.geometry.webMercatorToGeographic(g.geometry);
+        		g.attributes.Xdd = mp.x;
+        		g.attributes.Ydd = mp.y;
+				//these others aren't really used, but just to keep things in sync until we finally drop them.
+        		g.attributes.LATY = mp.y;
+        		g.attributes.LONX = mp.x;
+        		g.attributes.LAT = mp.y;
+        		g.attributes.LON = mp.x;
+        		cfidPointLayer.applyEdits(null, [g], null);
+        	}
+        	btn.text("Edit Point");
             editPointToolbar.deactivate();
             editingEnabled = false;
         }
     });
 }
-//function initEditingOld(evt) {
-
-//    var editLineLayer = map.getLayer(cfidLineLayer.id);
-//    var editPointLayer = map.getLayer(cfidPointLayer.id);
-
-//    var editLineToolbar = new esri.toolbars.Edit(map);
-//    var editPointToolbar = new esri.toolbars.Edit(map);
-
-//    var editingEnabled = false;
-
-
-
-//    // Toggle editing when a line is double-clicked
-//    editLineLayer.on("dbl-click", function (evt) {
-//        // Cancel all events. Prevents map from zooming.
-//        evt.preventDefault();
-//        evt.stopPropagation();
-//        if (editingEnabled === false) {
-//            editingEnabled = true;
-//            editLineToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, evt.graphic);
-
-//        } else {
-//            if (editLineToolbar.getCurrentState().isModified) {
-//                // Keep changes to the line
-//                editLineLayer.applyEdits(null, [editLineToolbar.getCurrentState().graphic], null);
-//                //TODO: Add the long/lang of the first and last points to the location data for this line
-//            }
-//            editLineToolbar.deactivate();
-//            editingEnabled = false;
-//        }
-//    });
-
-//    // Toggle editing when a point is double-clicked
-//    editPointLayer.on("dbl-click", function (evt) {
-//        // Cancel all events. Prevents map from zooming.
-//        evt.preventDefault();
-//        evt.stopPropagation();
-//        if (editingEnabled === false) {
-//            editingEnabled = true;
-//            editPointToolbar.activate(esri.toolbars.Edit.MOVE, evt.graphic);
-//        } else {
-//            if (editPointToolbar.getCurrentState().isModified) {
-//                // Keep change to the point and store new location in database
-//                editPointLayer.applyEdits(null, [editPointToolbar.getCurrentState().graphic], null);
-//                updatePointLocation(editPointToolbar.getCurrentState().graphic);
-//            }
-//            editPointToolbar.deactivate();
-//            editingEnabled = false;
-//        }
-//    });
-//}
-/* TESTING ALLOWING EDITING END */
 
 function openReport() {
     var issueIds = jQuery("#tableDiv").data("issueIds");
@@ -437,7 +388,6 @@ function openReport() {
 
 //handles click event to initiate identify task
 function identify(evt) {
-    //console.log("identify");
     identifyParams.geometry = evt.mapPoint;
     identifyParams.mapExtent = map.extent;
     identifyParams.layerDefinitions = [];
@@ -446,11 +396,9 @@ function identify(evt) {
     var deferred = identifyTask.execute(identifyParams);
 
     deferred.addCallback(function (response) {
-        //console.log(response);
         // response is an array of identify result objects    
         // Let's return an array of features.
         return dojo.map(response, function (result) {
-            //console.log(result);
             var feature = result.feature;
             feature.attributes.layerName = result.layerName;
             feature.setInfoTemplate(infoTemplate);
@@ -514,13 +462,10 @@ function updateFilter() {
 
     //assign to definition expression property of layers, will dynamically refresh the map to only show
     //features that match
-    //console.log("*************setting layer definitionExpression to " + definitionExpression);
     cfidPointLayer.setDefinitionExpression(definitionExpression);
 
     //store query for later user
     jQuery("#tableDiv").data("definitionExpression", definitionExpression);
-
-
 
     //update the table
     refreshObjectIds();
@@ -528,8 +473,6 @@ function updateFilter() {
 }
 
 function refreshObjectIds() {
-    //console.log("refreshing object Ids");
-
     //get the saved query
     //why not just pass to this function, you say? because we won't always be doing this in response to changing filter options
     var definitionExpression = jQuery("#tableDiv").data("definitionExpression");
@@ -545,11 +488,7 @@ function refreshObjectIds() {
         query.geometry = map.graphics.graphics[0].geometry;
     }
 
-    //console.log("using spatial filter option " + spatialFilterOption);
-    //console.log("using definition expression " + definitionExpression);
     query.where = definitionExpression;
-
-    //console.log(query.where);
 
     //execute query and store results
     cfidPointLayer.queryIds(query, function (objectIds) {
@@ -563,7 +502,6 @@ function refreshTable() {
     
     //bail if the dialog isn't open
     if (jQuery("#tableDiv").dialog("isOpen") == false) {
-        //console.log("attribute table is not open, nothing to refresh");
         return;
     }
 
