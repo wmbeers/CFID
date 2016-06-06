@@ -549,7 +549,39 @@
             </fieldset>
             
             <label for="ISSUE_DESCRIPTION">Issue Description</label>
-            <select id="ISSUE_DESCRIPTION" data-bind="options: issueDescriptions, optionsCaption: '-Select a value-', value:ISSUE_DESCRIPTION"></select><br />
+            <select id="ISSUE_DESCRIPTION" data-bind="optionsCaption: '-Select a value-', value:ISSUE_DESCRIPTION">
+                <optgroup label="Capacity">
+                    <option>Left Turn Lane Length</option>
+                    <option>Queue Length</option>
+                    <option>Right Turn Lane Length</option>
+                    <option>Number of Lanes</option>
+                    <option>Other Capacity Issues</option>
+                </optgroup>
+                <optgroup label="Maintenance">
+                    <option>Drainage/Ponding</option>
+                    <option>Railroad Crossing Replacement</option>
+                    <option>Substandard Pavement</option>
+                    <option>Other Maintenance Issues</option>
+                </optgroup>
+                <optgroup label="Operational">
+                    <option>Access Management – median openings, driveways</option>
+                    <option>Add New Signal</option>
+                    <option>Line of Sight</option>
+                    <option>Signage – navigational/directional</option>
+                    <option>Signal Timing / Design</option>
+                    <option>Stop Bar Modification</option>
+                    <option>Turn Radii</option>
+                    <option>Other Operational Issues</option>
+                </optgroup>
+                <optgroup label="Safety/Security">
+                    <option>Operational Safety</option>
+                    <option>Parking/Staging</option>
+                    <option>Lane Width</option>
+                    <option>Bridge Structure</option>
+                    <option>Physical Security</option>
+                    <option>Other Safety/Security Issues</option>
+                </optgroup>
+            </select><br />
             
             <label for="SOURCE">Collection Source</label>
             <select id="SOURCE" data-bind="options: $root.source, optionsCaption: '-Select a value-', value:SOURCE" ></select><br />

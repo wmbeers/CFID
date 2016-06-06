@@ -45,12 +45,6 @@ var RootViewModel = {
                                 "MPO/Local Gov't", "Study Team/Screening", "Other Source", "Screening Reports"]),
     priority: ko.observableArray(["High", "Low"]),
     implementationEase: ko.observableArray(["Easy", "Moderate", "Difficult"]),
-    lookupArrays: {
-        Capacity: ["Left Turn Lane Length", "Queue Length", "Right Turn Lane Length", "Number of Lanes", "Other Capacity Issues"],
-        Maintenance: ["Drainage/Ponding", "Railroad Crossing Replacement", "Substandard Pavement", "Other Maintenance Issues"],
-        Operational: ["Access Management – median openings, driveways", "Add New Signal", "Line of Sight", "Signage – navigational/directional", "Signal Timing / Design", "Stop Bar Modification", "Turn Radii", "Other Operational Issues"],
-        "Safety/Security": ["Operational Safety", "Parking/Staging", "Lane Width", "Bridge Structure", "Physical Security", "Other Safety/Security Issues"]
-    },
     transportSystem: ko.observableArray(["NHS","Off System - Local Road","On System - State Road","Regional Freight Mobility Corridor","SIS Connector","SIS Corridor"]),
     freightSystem: ko.observableArray(["Freight Activity Center Street","Freight Distribution Route","Limited Access Facility","Regional Freight Mobility Corridor"]),
     improvementStage: ko.observableArray(["Issue Identified","Issue Field Verified","Strategy","Identified","Accepted/Assigned to Work Program","Improvement in Progress","Completed"]),
@@ -170,10 +164,6 @@ function CFIDRecord(m) {
     //this.DATE_MODIFIED = '';
     this.MISC_INFO = '';
 
-    this.issueDescriptions = ko.computed(function () {
-        return RootViewModel.lookupArrays[self.FREIGHT_NEED()] || [];
-    });
-
     this.isSpecificLocation = ko.computed(function () {
         return self.ISSUE_EXTENT() == "Specific Location";
     });
@@ -256,7 +246,6 @@ function CFIDRecord(m) {
 CFIDRecord.prototype.toJSON = function () {
     var copy = ko.toJS(this); //easy way to get a clean copy
    
-    delete copy.issueDescriptions;
     delete copy.isSpecificLocation;
     delete copy.isCorridor;
     delete copy.canSave;
