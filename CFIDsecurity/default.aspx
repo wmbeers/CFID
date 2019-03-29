@@ -146,7 +146,9 @@
         function init() {
 
             //Initialize CFID layer
-            cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/FeatureServer/0",
+            //Rackspace version: cfidPointLayer = new esri.layers.FeatureLayer("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/FeatureServer/0",
+            //replaced by the following in AWS
+            cfidPointLayer = new esri.layers.FeatureLayer("https://gis.aecomonline.net/arcgis/rest/services/CFID/cfid4/FeatureServer/0",
                     {
                         mode: esri.layers.FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["IssueID", "SITE_LOCATION", "COUNTY", "FIELD_VERIFIED", "Ydd", "Xdd", "LATY", "LONX", "LAT", "LON"] //TODO: drop LATY, LONX, LAT and LON
@@ -221,7 +223,8 @@
             clickHandler = dojo.connect(map, "onClick", identify);
 
             //create identify tasks and setup parameters
-            identifyTask = new esri.tasks.IdentifyTask("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/MapServer");
+            //Rackspace version, replaced by following line in AWS identifyTask = new esri.tasks.IdentifyTask("https://webgis.ursokr.com/arcgis/rest/services/TAL/cfid4/MapServer");
+            identifyTask = new esri.tasks.IdentifyTask("https://gis.aecomonline.net/arcgis/rest/services/CFID/cfid4/MapServer");
             identifyParams = new esri.tasks.IdentifyParameters();
             identifyParams.tolerance = 6;
             identifyParams.returnGeometry = false;
